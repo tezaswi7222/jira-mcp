@@ -1,0 +1,21 @@
+# Source files (only publish dist/)
+src/
+
+# Config files
+tsconfig.json
+.vscode/
+.idea/
+
+# Environment and secrets (CRITICAL!)
+.env
+.env.*
+mcp.json
+
+# Development files
+*.log
+.gitignore
+
+# Tests
+__tests__/
+*.test.ts
+*.spec.ts

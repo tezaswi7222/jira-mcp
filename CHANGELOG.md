@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.1] - 2026-02-15
 
+### Added
+
+- **Phase 14: Code Quality & Security Hardening**
+  - Comprehensive codebase audit for deprecated APIs and best practices
+  - Migrated all API endpoints to Jira REST API v3 (latest stable)
+  - Verified Jira Agile API v1.0 compliance for all sprint/board operations
+  - Conducted full security vulnerability assessment
+
 ### Fixed
 
 - **Deprecated API Migration**: Updated `jira_get_create_metadata` tool to use modern non-deprecated endpoints
@@ -18,9 +26,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **Dependency Updates**: Patched security vulnerabilities
-  - Updated axios to fix HIGH severity DoS vulnerability (CVE in versions ≤1.13.4)
-  - Updated qs to fix LOW severity arrayLimit bypass vulnerability
+- **Dependency Updates**: Patched critical security vulnerabilities
+  - Updated axios to fix HIGH severity DoS vulnerability (CVE in versions ≤1.13.4) - prototype pollution via `__proto__`
+  - Updated qs to fix LOW severity arrayLimit bypass vulnerability (versions 6.7.0-6.14.1)
+  - All 166 packages now pass security audit with 0 vulnerabilities
+
+### Verified
+
+- **API Modernisation Audit Results**:
+  - ✅ All 78 tools use Jira REST API v3 (`/rest/api/3/`)
+  - ✅ All Agile tools use Jira Agile API v1.0 (`/rest/agile/1.0/`)
+  - ✅ OAuth 2.0 (3LO) and Basic Auth both fully supported
+  - ✅ Secure credential storage via keytar (OS-level encryption)
+  - ✅ Input validation via Zod v4 on all tool parameters
+  - ✅ Consistent error handling across all endpoints
+  - ✅ URL encoding applied to all dynamic path parameters
 
 ## [2.2.0] - 2026-02-15
 

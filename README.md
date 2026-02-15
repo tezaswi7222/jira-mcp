@@ -593,6 +593,22 @@ For OAuth authentication:
 
 </details>
 
+### 🛡️ Phase 14: Code Quality & Security
+
+This release underwent a comprehensive audit to ensure best practices and security:
+
+| Category | Status | Details |
+|----------|:------:|---------|
+| **API Version** | ✅ | All 78 tools use Jira REST API v3 (latest) |
+| **Agile API** | ✅ | Sprint/Board tools use Jira Agile API v1.0 |
+| **Deprecated APIs** | ✅ | All deprecated endpoints migrated to modern alternatives |
+| **Security Vulnerabilities** | ✅ | 0 vulnerabilities (axios & qs patched) |
+| **OAuth 2.0 Support** | ✅ | Full OAuth 2.0 (3LO) with auto-refresh |
+| **Credential Storage** | ✅ | OS-level encryption via Keytar |
+| **Input Validation** | ✅ | Zod v4 schema validation on all parameters |
+| **URL Encoding** | ✅ | All dynamic path parameters properly encoded |
+| **Error Handling** | ✅ | Consistent error handling across all endpoints |
+
 ## 💡 Usage Examples
 
 Once configured, interact with Jira through natural conversation:

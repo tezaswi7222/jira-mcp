@@ -153,11 +153,20 @@ npx mcp-jira-cloud
 
 ### Configure Your AI Assistant
 
-<details>
-<summary><strong>📘 VS Code (GitHub Copilot)</strong></summary>
+There are two ways to run the MCP server:
+
+| Method | Command | Best For |
+|--------|---------|----------|
+| **npx** (no install) | `npx mcp-jira-cloud` | Quick setup, always latest version |
+| **Global install** | `jira-mcp` | Faster startup, offline usage |
+
+---
+
+#### 📘 VS Code (GitHub Copilot)
 
 Create or edit `.vscode/mcp.json` in your workspace:
 
+**Using npx (recommended):**
 ```json
 {
   "servers": {
@@ -175,13 +184,31 @@ Create or edit `.vscode/mcp.json` in your workspace:
 }
 ```
 
-</details>
+**After global install (`npm i -g mcp-jira-cloud`):**
+```json
+{
+  "servers": {
+    "jira": {
+      "type": "stdio",
+      "command": "jira-mcp",
+      "args": [],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
 
-<details>
-<summary><strong>🤖 Claude Desktop</strong></summary>
+---
+
+#### 🤖 Claude Desktop
 
 Add to your Claude configuration (`claude_desktop_config.json`):
 
+**Using npx (recommended):**
 ```json
 {
   "mcpServers": {
@@ -198,13 +225,30 @@ Add to your Claude configuration (`claude_desktop_config.json`):
 }
 ```
 
-</details>
+**After global install (`npm i -g mcp-jira-cloud`):**
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "jira-mcp",
+      "args": [],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
 
-<details>
-<summary><strong>⚡ Cursor</strong></summary>
+---
+
+#### ⚡ Cursor
 
 Create `.cursor/mcp.json` in your project or home directory:
 
+**Using npx (recommended):**
 ```json
 {
   "mcpServers": {
@@ -221,13 +265,30 @@ Create `.cursor/mcp.json` in your project or home directory:
 }
 ```
 
-</details>
+**After global install (`npm i -g mcp-jira-cloud`):**
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "jira-mcp",
+      "args": [],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
 
-<details>
-<summary><strong>🔧 Windsurf</strong></summary>
+---
+
+#### 🔧 Windsurf
 
 Add to your Windsurf MCP configuration:
 
+**Using npx (recommended):**
 ```json
 {
   "mcpServers": {
@@ -244,7 +305,22 @@ Add to your Windsurf MCP configuration:
 }
 ```
 
-</details>
+**After global install (`npm i -g mcp-jira-cloud`):**
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "jira-mcp",
+      "args": [],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
 
 ## ⚙️ Configuration
 

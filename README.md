@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tezaswi7222/jira-mcp/main/assets/logo.svg" alt="Jira MCP Logo" width="120" height="120">
+  <img src="https://cdn.jsdelivr.net/npm/mcp-jira-cloud@latest/assets/logo.svg" alt="Jira MCP Logo" width="120" height="120">
 </p>
 
 <h1 align="center">Jira MCP Server</h1>

@@ -3,16 +3,41 @@
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "jira-mcp": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "ts-node --esm src/index.ts",
     "start": "node dist/index.js",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "jira",
+    "mcp",
+    "model-context-protocol",
+    "atlassian",
+    "copilot",
+    "claude",
+    "ai-assistant",
+    "automation",
+    "devtools"
+  ],
+  "author": "Tezaswi Raj <t.raj@maxxton.com>",
+  "license": "MIT",
+  "description": "A Model Context Protocol (MCP) server for Jira Cloud integration. Enables AI assistants to search issues, manage tickets, log work, and more.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tezaswi7222/jira-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tezaswi7222/jira-mcp/issues"
+  },
+  "homepage": "https://github.com/tezaswi7222/jira-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
     "axios": "^1.13.4",

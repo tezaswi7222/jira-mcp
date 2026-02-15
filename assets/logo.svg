@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0052CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2684FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF5630;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF7452;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="56" fill="url(#bgGrad)" />
+  
+  <!-- Jira-inspired shape -->
+  <g transform="translate(30, 28)">
+    <!-- Main shape -->
+    <path d="M30 0 L60 30 L30 60 L0 30 Z" fill="white" opacity="0.95"/>
+    
+    <!-- Inner diamond -->
+    <path d="M30 12 L48 30 L30 48 L12 30 Z" fill="url(#accentGrad)"/>
+    
+    <!-- Center dot -->
+    <circle cx="30" cy="30" r="6" fill="white"/>
+  </g>
+  
+  <!-- MCP text indicator -->
+  <text x="60" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">MCP</text>
+</svg>

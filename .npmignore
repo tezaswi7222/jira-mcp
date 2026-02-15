@@ -1,21 +1,96 @@
+# ============================================
+# NPM Ignore File for jira-mcp
+# ============================================
+# This file specifies which files/directories
+# should NOT be included in the npm package.
+# ============================================
+
 # Source files (only publish dist/)
 src/
+*.ts
+!*.d.ts
 
-# Config files
+# TypeScript configuration
 tsconfig.json
+tsconfig*.json
+
+# Editor and IDE
 .vscode/
 .idea/
+*.sublime-*
+*.swp
+*.swo
+*~
 
 # Environment and secrets (CRITICAL!)
 .env
 .env.*
+.env.local
+.env.*.local
 mcp.json
+*.pem
+*.key
+*.p12
+*.pfx
 
 # Development files
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Git
+.git/
 .gitignore
+.gitattributes
 
 # Tests
 __tests__/
+test/
+tests/
 *.test.ts
+*.test.js
 *.spec.ts
+*.spec.js
+coverage/
+.nyc_output/
+jest.config.*
+
+# Documentation (keep only README, CHANGELOG, LICENSE, SECURITY)
+docs/
+FEATURE_ROADMAP.md
+IMPLEMENTATION_PLAN.md
+CONTRIBUTING.md
+*.md.bak
+
+# Assets (logo is hosted on GitHub, not in npm package)
+assets/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+appveyor.yml
+azure-pipelines.yml
+Jenkinsfile
+.circleci/
+
+# Build artifacts (not needed)
+*.tgz
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Misc
+*.orig
+*.rej
+*.bak
+*.backup
+

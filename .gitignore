@@ -54,3 +54,7 @@ coverage/
 *.key
 *.p12
 *.pfx
+
+# Internal planning documents (removed from history)
+FEATURE_ROADMAP.md
+IMPLEMENTATION_PLAN.md

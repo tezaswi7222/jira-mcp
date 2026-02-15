@@ -1,27 +1,56 @@
+# ============================================
+# Git Ignore File for jira-mcp
+# ============================================
+
 # Dependencies
 node_modules/
 
-# Build output (optional - you may want to commit dist/)
-# dist/
+# Build output
+dist/
 
 # IDE/Editor
-.vscode/
 .idea/
 *.swp
 *.swo
+*~
+
+# VS Code - keep settings but ignore MCP config with secrets
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # Environment files (NEVER commit these!)
 .env
+.env.*
 .env.local
 .env.*.local
+
+# Local MCP config with tokens (CRITICAL!)
+mcp.json
+.vscode/mcp.json
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Local MCP config with tokens
-mcp.json
+# npm pack output
+*.tgz
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Secrets and keys
+*.pem
+*.key
+*.p12
+*.pfx

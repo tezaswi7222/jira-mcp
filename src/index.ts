@@ -3501,29 +3501,44 @@ server.registerTool(
   {
     title: "Get Create Issue Metadata",
     description:
-      "Get metadata for creating issues in a project, including required fields.",
+      "Get metadata for creating issues in a project, including available issue types and their fields. Uses the modern non-deprecated API endpoints.",
     inputSchema: z.object({
-      projectKeys: z.array(z.string()).optional().describe("Project keys to get metadata for"),
-      projectIds: z.array(z.string()).optional().describe("Project IDs to get metadata for"),
-      issuetypeNames: z.array(z.string()).optional().describe("Issue type names to filter"),
-      expand: z.string().optional().describe("Expand options"),
+      projectIdOrKey: z.string().min(1).describe("Project key or ID (required)"),
+      issueTypeId: z.string().optional().describe("Issue type ID to get field metadata for (optional - if not provided, returns available issue types)"),
+      startAt: z.number().optional().describe("Starting index for pagination"),
+      maxResults: z.number().optional().describe("Maximum results (default 50, max 50)"),
     }),
   },
-  async ({ projectKeys, projectIds, issuetypeNames, expand }) => {
+  async ({ projectIdOrKey, issueTypeId, startAt, maxResults }) => {
     try {
       const auth = await getAuthOrThrow();
       const client = createClient(auth);
 
-      const response = await client.get("/rest/api/3/issue/createmeta", {
-        params: {
-          projectKeys: projectKeys?.join(","),
-          projectIds: projectIds?.join(","),
-          issuetypeNames: issuetypeNames?.join(","),
-          expand: expand || "projects.issuetypes.fields",
-        },
-      });
-
-      return textResult(response.data);
+      if (issueTypeId) {
+        // Get field metadata for specific issue type
+        const response = await client.get(
+          `/rest/api/3/issue/createmeta/${encodeURIComponent(projectIdOrKey)}/issuetypes/${encodeURIComponent(issueTypeId)}`,
+          {
+            params: {
+              startAt: startAt || 0,
+              maxResults: maxResults || 50,
+            },
+          }
+        );
+        return textResult(response.data);
+      } else {
+        // Get available issue types for project
+        const response = await client.get(
+          `/rest/api/3/issue/createmeta/${encodeURIComponent(projectIdOrKey)}/issuetypes`,
+          {
+            params: {
+              startAt: startAt || 0,
+              maxResults: maxResults || 50,
+            },
+          }
+        );
+        return textResult(response.data);
+      }
     } catch (error) {
       return textResult(errorToResult(error));
     }

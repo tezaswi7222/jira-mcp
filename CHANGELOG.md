@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-02-15
+
+### Fixed
+
+- **Deprecated API Migration**: Updated `jira_get_create_metadata` tool to use modern non-deprecated endpoints
+  - Replaced deprecated `GET /rest/api/3/issue/createmeta` with:
+    - `GET /rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes` - Get available issue types
+    - `GET /rest/api/3/issue/createmeta/{projectIdOrKey}/issuetypes/{issueTypeId}` - Get field metadata
+  - Now requires `projectIdOrKey` parameter (breaking change from optional `projectKeys` array)
+  - Added pagination support with `startAt` and `maxResults` parameters
+
+### Security
+
+- **Dependency Updates**: Patched security vulnerabilities
+  - Updated axios to fix HIGH severity DoS vulnerability (CVE in versions ≤1.13.4)
+  - Updated qs to fix LOW severity arrayLimit bypass vulnerability
+
+## [2.2.0] - 2026-02-15
+
+### Added
+
+- **Phase 13: Time Tracking Reports** (4 new tools)
+  - `jira_get_updated_worklog_ids` - Get worklog IDs updated since a timestamp (for efficient sync)
+  - `jira_get_worklogs_by_ids` - Bulk fetch worklogs by their IDs (up to 1000 at once)
+  - `jira_get_user_worklogs` - Get all worklogs for a user within a date range with automatic JQL and pagination
+  - `jira_get_deleted_worklog_ids` - Get worklog IDs that have been deleted since a timestamp
+
+### Changed
+
+- Total tool count now at 78 tools across 13 phases
+- Enhanced time tracking capabilities for better reporting and analysis
+
 ## [2.1.0] - 2026-02-15
 
 ### Added

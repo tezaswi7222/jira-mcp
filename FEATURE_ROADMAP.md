@@ -663,4 +663,4 @@ This roadmap outlines a comprehensive plan to evolve the Jira MCP Server from a 
 ---
 
 *Last Updated: February 2026*
-*Author: GitHub Copilot*
+*Author: Tezaswi Raj*

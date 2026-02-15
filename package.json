@@ -1,17 +1,44 @@
 {
   "name": "jira-mcp",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "description": "A Model Context Protocol (MCP) server for Jira Cloud integration. Enables AI assistants like GitHub Copilot and Claude to search issues, manage tickets, log work, handle sprints, and interact with your Jira instance seamlessly. Features 57 tools for comprehensive Jira management.",
   "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
     "jira-mcp": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "ts-node --esm src/index.ts",
     "start": "node dist/index.js",
+    "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\"",
+    "prebuild": "npm run clean",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepack": "npm run build",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack:dry": "npm pack --dry-run",
+    "release:patch": "npm version patch -m \"chore(release): %s\"",
+    "release:minor": "npm version minor -m \"chore(release): %s\"",
+    "release:major": "npm version major -m \"chore(release): %s\""
   },
   "keywords": [
     "jira",
@@ -22,21 +49,53 @@
     "claude",
     "ai-assistant",
     "automation",
-    "devtools"
+    "devtools",
+    "jira-cloud",
+    "vscode",
+    "github-copilot",
+    "ai",
+    "llm",
+    "developer-tools",
+    "productivity"
   ],
-  "author": "Tezaswi Raj <t.raj@maxxton.com>",
+  "author": {
+    "name": "Tezaswi Raj",
+    "email": "t.raj@maxxton.com",
+    "url": "https://github.com/tezaswi7222"
+  },
+  "contributors": [
+    {
+      "name": "Tezaswi Raj",
+      "email": "t.raj@maxxton.com",
+      "url": "https://github.com/tezaswi7222"
+    }
+  ],
   "license": "MIT",
-  "description": "A Model Context Protocol (MCP) server for Jira Cloud integration. Enables AI assistants to search issues, manage tickets, log work, and more.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tezaswi7222/jira-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/tezaswi7222/jira-mcp/issues"
+    "url": "https://github.com/tezaswi7222/jira-mcp/issues",
+    "email": "t.raj@maxxton.com"
   },
   "homepage": "https://github.com/tezaswi7222/jira-mcp#readme",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/tezaswi7222"
+  },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",

@@ -104,12 +104,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `jira_validate_jql` - Validate JQL query syntax
   - `jira_parse_jql` - Parse JQL into AST structure
 
+- **Phase 13: Time Tracking Reports** (4 new tools)
+  - `jira_get_updated_worklog_ids` - Get worklog IDs created/updated since a date
+  - `jira_get_worklogs_by_ids` - Get full worklog details by IDs
+  - `jira_get_user_worklogs` - Get all worklogs for a user in a date range with summary
+  - `jira_get_deleted_worklog_ids` - Get IDs of deleted worklogs for audit
+
 ### Changed
 
 - Version bumped to 2.0.0 (major feature release)
 - Helper functions for field building (`buildIssueFields`, `buildUpdateOperations`)
 - Improved TypeScript strict mode compliance
-- Total tools: 74 (up from 18)
+- Total tools: 78 (up from 18)
 
 ---
 
@@ -160,7 +166,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 
 - Webhook integration
-- Time tracking reports
 - Burndown chart data
 - Release management
 - Custom field management
+- Team workload reports

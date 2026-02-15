@@ -146,7 +146,7 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 </table>
 
 <p align="center">
-  <strong>74 Tools</strong> for comprehensive Jira management
+  <strong>78 Tools</strong> for comprehensive Jira management
 </p>
 
 ## 🚀 Quick Start
@@ -384,7 +384,7 @@ For OAuth authentication:
 
 ## 🛠️ Available Tools
 
-> **74 tools** organised into 14 categories
+> **78 tools** organised into 15 categories
 
 ### 🔐 Authentication (7 tools)
 
@@ -581,6 +581,18 @@ For OAuth authentication:
 
 </details>
 
+<details>
+<summary><strong>⏱️ Time Tracking Reports (4 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_get_updated_worklog_ids` | Get worklog IDs created/updated since a date |
+| `jira_get_worklogs_by_ids` | Get full worklog details by IDs (batch up to 1000) |
+| `jira_get_user_worklogs` | Get all worklogs for a user in a date range with summary |
+| `jira_get_deleted_worklog_ids` | Get IDs of deleted worklogs for audit purposes |
+
+</details>
+
 ## 💡 Usage Examples
 
 Once configured, interact with Jira through natural conversation:
@@ -695,12 +707,12 @@ The issue or project doesn't exist, or you don't have access to view it.
 | Attribute | Value |
 |-----------|-------|
 | Package name | [`mcp-jira-cloud`](https://www.npmjs.com/package/mcp-jira-cloud) |
-| Version | **2.0.0** |
+| Version | **2.2.0** |
 | License | [MIT](LICENSE) |
 | Node.js | ≥18.0.0 |
 | TypeScript | ≥5.0.0 |
 | Module | ES Modules |
-| Tools | **74** |
+| Tools | **78** |
 
 ### Dependencies
 
@@ -730,9 +742,10 @@ The issue or project doesn't exist, or you don't have access to view it.
 - **Enhanced Attachments** - Upload attachments, get metadata and content
 - **Labels Management** - Get all labels, bulk add/remove/set labels
 - **JQL Tools** - Autocomplete, validate, and parse JQL queries
+- **Time Tracking Reports** - Get user worklogs for any date range with summaries
 
 ### Changed
-- Total tools increased from 18 to 74
+- Total tools increased from 18 to 78
 - Improved TypeScript strict mode compliance
 - Enhanced error handling and validation
 

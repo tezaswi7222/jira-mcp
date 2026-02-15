@@ -4684,5 +4684,409 @@ server.registerTool(
   }
 );
 
+// ============================================================================
+// PHASE 13: TIME TRACKING REPORTS
+// ============================================================================
+
+server.registerTool(
+  "jira_get_updated_worklog_ids",
+  {
+    title: "Get Updated Worklog IDs",
+    description:
+      "Get IDs of worklogs that were created or updated since a specific date/time. Use this to discover worklogs for reporting purposes.",
+    inputSchema: z.object({
+      since: z
+        .string()
+        .describe(
+          "Get worklogs updated since this date. Can be ISO 8601 format (e.g., '2026-01-15T00:00:00.000Z') or Unix timestamp in milliseconds."
+        ),
+      expand: z
+        .string()
+        .optional()
+        .describe("Expand options for additional worklog properties"),
+    }),
+  },
+  async ({ since, expand }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      // Convert ISO date string to Unix timestamp if needed
+      let sinceTimestamp: number;
+      if (/^\d+$/.test(since)) {
+        sinceTimestamp = parseInt(since, 10);
+      } else {
+        sinceTimestamp = new Date(since).getTime();
+      }
+
+      const params: Record<string, unknown> = { since: sinceTimestamp };
+      if (expand) params.expand = expand;
+
+      const response = await client.get("/rest/api/3/worklog/updated", { params });
+
+      return textResult({
+        since: sinceTimestamp,
+        sinceDate: new Date(sinceTimestamp).toISOString(),
+        until: response.data.until,
+        untilDate: response.data.until ? new Date(response.data.until).toISOString() : null,
+        lastPage: response.data.lastPage,
+        nextPage: response.data.nextPage,
+        worklogIds: (response.data.values || []).map((v: any) => ({
+          worklogId: v.worklogId,
+          updatedTime: v.updatedTime,
+          updatedDate: new Date(v.updatedTime).toISOString(),
+        })),
+        total: response.data.values?.length || 0,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_worklogs_by_ids",
+  {
+    title: "Get Worklogs by IDs",
+    description:
+      "Get full worklog details for a list of worklog IDs. Use after getting IDs from jira_get_updated_worklog_ids.",
+    inputSchema: z.object({
+      ids: z
+        .array(z.number().int().positive())
+        .min(1)
+        .max(1000)
+        .describe("Array of worklog IDs to fetch (max 1000)"),
+      expand: z.string().optional().describe("Expand options"),
+    }),
+  },
+  async ({ ids, expand }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const params: Record<string, unknown> = {};
+      if (expand) params.expand = expand;
+
+      const response = await client.post(
+        "/rest/api/3/worklog/list",
+        { ids },
+        { params }
+      );
+
+      const worklogs = Array.isArray(response.data)
+        ? response.data.map((worklog: any) => ({
+            id: worklog.id,
+            issueId: worklog.issueId,
+            author: {
+              accountId: worklog.author?.accountId,
+              displayName: worklog.author?.displayName,
+              emailAddress: worklog.author?.emailAddress,
+            },
+            updateAuthor: {
+              accountId: worklog.updateAuthor?.accountId,
+              displayName: worklog.updateAuthor?.displayName,
+            },
+            timeSpent: worklog.timeSpent,
+            timeSpentSeconds: worklog.timeSpentSeconds,
+            started: worklog.started,
+            created: worklog.created,
+            updated: worklog.updated,
+            comment: normalizeFieldText(worklog.comment),
+          }))
+        : [];
+
+      return textResult({
+        worklogs,
+        total: worklogs.length,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_user_worklogs",
+  {
+    title: "Get User Worklogs",
+    description:
+      "Get all worklogs for a specific user within a date range. Combines worklog discovery and filtering to provide a complete time tracking report for a person.",
+    inputSchema: z.object({
+      accountId: z
+        .string()
+        .optional()
+        .describe(
+          "User account ID to filter worklogs for. If not provided, returns worklogs for the current user."
+        ),
+      since: z
+        .string()
+        .describe(
+          "Start date for the report. ISO 8601 format (e.g., '2026-01-15') or relative like '30 days ago' will be parsed."
+        ),
+      until: z
+        .string()
+        .optional()
+        .describe("End date for the report. Defaults to now if not provided."),
+      includeIssueDetails: z
+        .boolean()
+        .optional()
+        .default(false)
+        .describe("Whether to fetch issue details (key, summary) for each worklog"),
+    }),
+  },
+  async ({ accountId, since, until, includeIssueDetails }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      // Get current user if no accountId provided
+      let targetAccountId = accountId;
+      let targetUserName = "";
+      if (!targetAccountId) {
+        const meResponse = await client.get("/rest/api/3/myself");
+        targetAccountId = meResponse.data.accountId;
+        targetUserName = meResponse.data.displayName || meResponse.data.emailAddress;
+      }
+
+      // Parse since date
+      let sinceTimestamp: number;
+      const sinceMatch = since.match(/^(\d+)\s*(days?|weeks?|months?)\s*ago$/i);
+      if (sinceMatch && sinceMatch[1] && sinceMatch[2]) {
+        const amount = parseInt(sinceMatch[1], 10);
+        const unit = sinceMatch[2].toLowerCase();
+        const now = new Date();
+        if (unit.startsWith("day")) {
+          now.setDate(now.getDate() - amount);
+        } else if (unit.startsWith("week")) {
+          now.setDate(now.getDate() - amount * 7);
+        } else if (unit.startsWith("month")) {
+          now.setMonth(now.getMonth() - amount);
+        }
+        sinceTimestamp = now.getTime();
+      } else {
+        sinceTimestamp = new Date(since).getTime();
+      }
+
+      // Parse until date
+      let untilTimestamp: number | undefined;
+      if (until) {
+        untilTimestamp = new Date(until).getTime();
+      }
+
+      // Fetch all updated worklog IDs since the date (paginated)
+      const allWorklogIds: Array<number> = [];
+      let nextPageUrl: string | undefined = `/rest/api/3/worklog/updated?since=${sinceTimestamp}`;
+      let pageCount = 0;
+      const maxPages = 10; // Safety limit
+
+      while (nextPageUrl && pageCount < maxPages) {
+        const pageResponse: { data: { values?: Array<{ worklogId: number; updatedTime: number }>; lastPage?: boolean; nextPage?: string } } = await client.get(nextPageUrl);
+        const values = pageResponse.data.values || [];
+        
+        for (const v of values) {
+          // Filter by until date if provided
+          if (untilTimestamp && v.updatedTime > untilTimestamp) {
+            continue;
+          }
+          allWorklogIds.push(v.worklogId);
+        }
+
+        if (pageResponse.data.lastPage) {
+          break;
+        }
+        nextPageUrl = pageResponse.data.nextPage;
+        pageCount++;
+      }
+
+      if (allWorklogIds.length === 0) {
+        return textResult({
+          user: targetUserName || targetAccountId,
+          accountId: targetAccountId,
+          period: {
+            since: new Date(sinceTimestamp).toISOString(),
+            until: untilTimestamp ? new Date(untilTimestamp).toISOString() : new Date().toISOString(),
+          },
+          worklogs: [],
+          summary: {
+            totalWorklogs: 0,
+            totalTimeSpentSeconds: 0,
+            totalTimeSpent: "0h",
+          },
+        });
+      }
+
+      // Fetch worklog details in batches of 1000
+      const allWorklogs: Array<any> = [];
+      for (let i = 0; i < allWorklogIds.length; i += 1000) {
+        const batchIds = allWorklogIds.slice(i, i + 1000);
+        const response = await client.post("/rest/api/3/worklog/list", { ids: batchIds });
+        if (Array.isArray(response.data)) {
+          allWorklogs.push(...response.data);
+        }
+      }
+
+      // Filter worklogs by user
+      const userWorklogs = allWorklogs.filter(
+        (w: any) => w.author?.accountId === targetAccountId
+      );
+
+      // Optionally fetch issue details
+      const issueCache: Record<string, { key: string; summary: string }> = {};
+      if (includeIssueDetails && userWorklogs.length > 0) {
+        const uniqueIssueIds = [...new Set(userWorklogs.map((w: any) => w.issueId))];
+        // Fetch issues in batches using JQL
+        for (let i = 0; i < uniqueIssueIds.length; i += 50) {
+          const batchIds = uniqueIssueIds.slice(i, i + 50);
+          try {
+            const issueResponse = await client.get("/rest/api/3/search", {
+              params: {
+                jql: `id in (${batchIds.join(",")})`,
+                fields: "summary",
+                maxResults: 50,
+              },
+            });
+            for (const issue of issueResponse.data.issues || []) {
+              issueCache[issue.id] = {
+                key: issue.key,
+                summary: issue.fields?.summary || "",
+              };
+            }
+          } catch {
+            // Continue even if some issues can't be fetched
+          }
+        }
+      }
+
+      // Format worklogs
+      const formattedWorklogs = userWorklogs.map((w: any) => {
+        const result: Record<string, unknown> = {
+          id: w.id,
+          issueId: w.issueId,
+          timeSpent: w.timeSpent,
+          timeSpentSeconds: w.timeSpentSeconds,
+          started: w.started,
+          created: w.created,
+          comment: normalizeFieldText(w.comment),
+        };
+        const cachedIssue = issueCache[w.issueId];
+        if (includeIssueDetails && cachedIssue) {
+          result.issueKey = cachedIssue.key;
+          result.issueSummary = cachedIssue.summary;
+        }
+        return result;
+      });
+
+      // Sort by started date
+      formattedWorklogs.sort((a: any, b: any) => 
+        new Date(a.started).getTime() - new Date(b.started).getTime()
+      );
+
+      // Calculate summary
+      const totalSeconds = userWorklogs.reduce(
+        (sum: number, w: any) => sum + (w.timeSpentSeconds || 0),
+        0
+      );
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const totalTimeSpent = minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
+
+      // Group by issue if details included
+      let byIssue: Record<string, { key: string; summary: string; totalSeconds: number; totalTime: string }> | undefined;
+      if (includeIssueDetails) {
+        byIssue = {};
+        for (const w of formattedWorklogs) {
+          const issueId = w.issueId as string;
+          if (!byIssue[issueId]) {
+            byIssue[issueId] = {
+              key: (w.issueKey as string) || issueId,
+              summary: (w.issueSummary as string) || "",
+              totalSeconds: 0,
+              totalTime: "",
+            };
+          }
+          byIssue[issueId].totalSeconds += (w.timeSpentSeconds as number) || 0;
+        }
+        // Format time for each issue
+        for (const issueId of Object.keys(byIssue)) {
+          const issueEntry = byIssue[issueId];
+          if (issueEntry) {
+            const secs = issueEntry.totalSeconds;
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            issueEntry.totalTime = m > 0 ? `${h}h ${m}m` : `${h}h`;
+          }
+        }
+      }
+
+      return textResult({
+        user: targetUserName || targetAccountId,
+        accountId: targetAccountId,
+        period: {
+          since: new Date(sinceTimestamp).toISOString(),
+          until: untilTimestamp ? new Date(untilTimestamp).toISOString() : new Date().toISOString(),
+        },
+        worklogs: formattedWorklogs,
+        summary: {
+          totalWorklogs: formattedWorklogs.length,
+          totalTimeSpentSeconds: totalSeconds,
+          totalTimeSpent,
+          ...(byIssue && { byIssue: Object.values(byIssue) }),
+        },
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_deleted_worklog_ids",
+  {
+    title: "Get Deleted Worklog IDs",
+    description:
+      "Get IDs of worklogs that were deleted since a specific date/time. Useful for audit and sync purposes.",
+    inputSchema: z.object({
+      since: z
+        .string()
+        .describe(
+          "Get worklogs deleted since this date. ISO 8601 format or Unix timestamp in milliseconds."
+        ),
+    }),
+  },
+  async ({ since }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      // Convert ISO date string to Unix timestamp if needed
+      let sinceTimestamp: number;
+      if (/^\d+$/.test(since)) {
+        sinceTimestamp = parseInt(since, 10);
+      } else {
+        sinceTimestamp = new Date(since).getTime();
+      }
+
+      const response = await client.get("/rest/api/3/worklog/deleted", {
+        params: { since: sinceTimestamp },
+      });
+
+      return textResult({
+        since: sinceTimestamp,
+        sinceDate: new Date(sinceTimestamp).toISOString(),
+        until: response.data.until,
+        lastPage: response.data.lastPage,
+        nextPage: response.data.nextPage,
+        deletedWorklogIds: (response.data.values || []).map((v: any) => ({
+          worklogId: v.worklogId,
+          updatedTime: v.updatedTime,
+        })),
+        total: response.data.values?.length || 0,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
 const transport = new StdioServerTransport();
 await server.connect(transport);

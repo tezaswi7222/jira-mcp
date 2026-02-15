@@ -3833,5 +3833,856 @@ server.registerTool(
   }
 );
 
+// ============================================================================
+// PHASE 8: BULK OPERATIONS
+// ============================================================================
+
+server.registerTool(
+  "jira_bulk_edit_issues",
+  {
+    title: "Bulk Edit Issues",
+    description:
+      "Edit multiple issues at once. Supports bulk editing of labels, assignee, priority, components, and fix versions. Returns a taskId to track progress.",
+    inputSchema: z.object({
+      issueIdsOrKeys: z
+        .array(z.string())
+        .min(1)
+        .describe("Array of issue IDs or keys to edit"),
+      editedFieldsInput: z
+        .object({
+          labels: z
+            .object({
+              add: z.array(z.string()).optional().describe("Labels to add"),
+              remove: z.array(z.string()).optional().describe("Labels to remove"),
+              set: z.array(z.string()).optional().describe("Labels to set (replaces all)"),
+            })
+            .optional(),
+          assignee: z
+            .object({
+              accountId: z.string().describe("Account ID of the assignee"),
+            })
+            .optional(),
+          priority: z
+            .object({
+              id: z.string().describe("Priority ID"),
+            })
+            .optional(),
+          components: z
+            .object({
+              add: z.array(z.object({ id: z.string() })).optional(),
+              remove: z.array(z.object({ id: z.string() })).optional(),
+            })
+            .optional(),
+          fixVersions: z
+            .object({
+              add: z.array(z.object({ id: z.string() })).optional(),
+              remove: z.array(z.object({ id: z.string() })).optional(),
+            })
+            .optional(),
+        })
+        .describe("Fields to edit with their operations"),
+      sendNotifications: z
+        .boolean()
+        .optional()
+        .default(true)
+        .describe("Whether to send email notifications"),
+    }),
+  },
+  async ({ issueIdsOrKeys, editedFieldsInput, sendNotifications }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post("/rest/api/3/bulk/issues/fields", {
+        issueIdsOrKeys,
+        editedFieldsInput,
+        sendNotifications,
+      });
+
+      return textResult({
+        success: true,
+        taskId: response.data.taskId,
+        message: `Bulk edit initiated for ${issueIdsOrKeys.length} issues. Use jira_get_bulk_operation_progress with taskId to track progress.`,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_bulk_watch_issues",
+  {
+    title: "Bulk Watch Issues",
+    description:
+      "Add watchers to multiple issues at once. Returns a taskId to track progress.",
+    inputSchema: z.object({
+      issueIdsOrKeys: z
+        .array(z.string())
+        .min(1)
+        .describe("Array of issue IDs or keys to watch"),
+      accountIds: z
+        .array(z.string())
+        .optional()
+        .describe("Account IDs to add as watchers (defaults to current user)"),
+    }),
+  },
+  async ({ issueIdsOrKeys, accountIds }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post("/rest/api/3/bulk/issues/watch", {
+        issueIdsOrKeys,
+        ...(accountIds && { accountIds }),
+      });
+
+      return textResult({
+        success: true,
+        taskId: response.data.taskId,
+        message: `Bulk watch initiated for ${issueIdsOrKeys.length} issues. Use jira_get_bulk_operation_progress with taskId to track progress.`,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_bulk_unwatch_issues",
+  {
+    title: "Bulk Unwatch Issues",
+    description:
+      "Remove watchers from multiple issues at once. Returns a taskId to track progress.",
+    inputSchema: z.object({
+      issueIdsOrKeys: z
+        .array(z.string())
+        .min(1)
+        .describe("Array of issue IDs or keys to unwatch"),
+      accountIds: z
+        .array(z.string())
+        .optional()
+        .describe("Account IDs to remove as watchers (defaults to current user)"),
+    }),
+  },
+  async ({ issueIdsOrKeys, accountIds }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post("/rest/api/3/bulk/issues/unwatch", {
+        issueIdsOrKeys,
+        ...(accountIds && { accountIds }),
+      });
+
+      return textResult({
+        success: true,
+        taskId: response.data.taskId,
+        message: `Bulk unwatch initiated for ${issueIdsOrKeys.length} issues. Use jira_get_bulk_operation_progress with taskId to track progress.`,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_bulk_operation_progress",
+  {
+    title: "Get Bulk Operation Progress",
+    description:
+      "Check the progress of an async bulk operation using its taskId.",
+    inputSchema: z.object({
+      taskId: z.string().describe("The task ID returned from a bulk operation"),
+    }),
+  },
+  async ({ taskId }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(`/rest/api/3/bulk/queue/${taskId}`);
+
+      const data = response.data;
+      return textResult({
+        taskId: data.taskId,
+        status: data.status,
+        progress: data.progress,
+        submittedBy: data.submittedBy,
+        created: data.created,
+        started: data.started,
+        finished: data.finished,
+        successfulIssues: data.successfulIssues || [],
+        failedIssues: data.failedIssues || [],
+        totalIssues: (data.successfulIssues?.length || 0) + (data.failedIssues?.length || 0),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+// ============================================================================
+// PHASE 9: DASHBOARD MANAGEMENT
+// ============================================================================
+
+server.registerTool(
+  "jira_get_dashboards",
+  {
+    title: "Get Dashboards",
+    description:
+      "Get a list of dashboards. Can filter by favourite or owned dashboards.",
+    inputSchema: z.object({
+      filter: z
+        .enum(["favourite", "my"])
+        .optional()
+        .describe("Filter dashboards: 'favourite' for favourited, 'my' for owned"),
+      startAt: z.number().optional().default(0).describe("Index of first result"),
+      maxResults: z.number().optional().default(50).describe("Maximum results to return"),
+    }),
+  },
+  async ({ filter, startAt, maxResults }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get("/rest/api/3/dashboard", {
+        params: { filter, startAt, maxResults },
+      });
+
+      return textResult({
+        total: response.data.total,
+        startAt: response.data.startAt,
+        maxResults: response.data.maxResults,
+        dashboards: (response.data.dashboards || []).map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          self: d.self,
+          isFavourite: d.isFavourite,
+          view: d.view,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_search_dashboards",
+  {
+    title: "Search Dashboards",
+    description:
+      "Search for dashboards by name, owner, or other criteria.",
+    inputSchema: z.object({
+      dashboardName: z
+        .string()
+        .optional()
+        .describe("Filter by dashboard name (case insensitive contains)"),
+      accountId: z.string().optional().describe("Filter by owner account ID"),
+      groupname: z.string().optional().describe("Filter by group permission"),
+      orderBy: z
+        .enum([
+          "name",
+          "-name",
+          "id",
+          "-id",
+          "owner",
+          "-owner",
+          "favourite_count",
+          "-favourite_count",
+        ])
+        .optional()
+        .describe("Order results by field (prefix with - for descending)"),
+      startAt: z.number().optional().default(0).describe("Index of first result"),
+      maxResults: z.number().optional().default(50).describe("Maximum results"),
+      expand: z
+        .string()
+        .optional()
+        .describe("Expand options: description, owner, viewUrl, favourite, favouritedCount, sharePermissions, editPermissions"),
+    }),
+  },
+  async ({ dashboardName, accountId, groupname, orderBy, startAt, maxResults, expand }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get("/rest/api/3/dashboard/search", {
+        params: {
+          dashboardName,
+          accountId,
+          groupname,
+          orderBy,
+          startAt,
+          maxResults,
+          expand,
+        },
+      });
+
+      return textResult({
+        total: response.data.total,
+        startAt: response.data.startAt,
+        maxResults: response.data.maxResults,
+        dashboards: (response.data.values || []).map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          description: d.description,
+          owner: d.owner
+            ? { accountId: d.owner.accountId, displayName: d.owner.displayName }
+            : undefined,
+          isFavourite: d.isFavourite,
+          popularity: d.popularity,
+          view: d.view,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_dashboard",
+  {
+    title: "Get Dashboard",
+    description: "Get details of a specific dashboard by ID.",
+    inputSchema: z.object({
+      id: z.string().describe("Dashboard ID"),
+    }),
+  },
+  async ({ id }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(`/rest/api/3/dashboard/${id}`);
+
+      const d = response.data;
+      return textResult({
+        id: d.id,
+        name: d.name,
+        description: d.description,
+        self: d.self,
+        isFavourite: d.isFavourite,
+        owner: d.owner
+          ? { accountId: d.owner.accountId, displayName: d.owner.displayName }
+          : undefined,
+        popularity: d.popularity,
+        view: d.view,
+        editPermissions: d.editPermissions,
+        sharePermissions: d.sharePermissions,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_dashboard_gadgets",
+  {
+    title: "Get Dashboard Gadgets",
+    description: "Get all gadgets on a dashboard.",
+    inputSchema: z.object({
+      dashboardId: z.string().describe("Dashboard ID"),
+      moduleKey: z
+        .array(z.string())
+        .optional()
+        .describe("Filter by gadget module keys"),
+      uri: z.string().optional().describe("Filter by gadget URI"),
+      gadgetId: z.array(z.string()).optional().describe("Filter by gadget IDs"),
+    }),
+  },
+  async ({ dashboardId, moduleKey, uri, gadgetId }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(
+        `/rest/api/3/dashboard/${dashboardId}/gadget`,
+        {
+          params: {
+            moduleKey: moduleKey?.join(","),
+            uri,
+            gadgetId: gadgetId?.join(","),
+          },
+        }
+      );
+
+      return textResult({
+        gadgets: (response.data.gadgets || []).map((g: any) => ({
+          id: g.id,
+          moduleKey: g.moduleKey,
+          uri: g.uri,
+          color: g.color,
+          position: g.position,
+          title: g.title,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_add_dashboard_gadget",
+  {
+    title: "Add Dashboard Gadget",
+    description:
+      "Add a gadget to a dashboard. Provide either moduleKey or uri to specify the gadget type.",
+    inputSchema: z.object({
+      dashboardId: z.string().describe("Dashboard ID"),
+      moduleKey: z
+        .string()
+        .optional()
+        .describe("Module key of the gadget type (e.g., com.atlassian.jira.gadgets:filter-results-gadget)"),
+      uri: z.string().optional().describe("URI of the gadget type"),
+      color: z
+        .enum(["blue", "red", "yellow", "green", "cyan", "purple", "gray", "white"])
+        .optional()
+        .describe("Gadget colour"),
+      position: z
+        .object({
+          row: z.number().describe("Row position (0-indexed)"),
+          column: z.number().describe("Column position (0-indexed)"),
+        })
+        .optional()
+        .describe("Position on dashboard grid"),
+      title: z.string().optional().describe("Gadget title"),
+      ignoreUriAndModuleKeyValidation: z
+        .boolean()
+        .optional()
+        .default(false)
+        .describe("Skip validation of moduleKey/uri"),
+    }),
+  },
+  async ({
+    dashboardId,
+    moduleKey,
+    uri,
+    color,
+    position,
+    title,
+    ignoreUriAndModuleKeyValidation,
+  }) => {
+    try {
+      if (!moduleKey && !uri) {
+        return textResult({
+          error: true,
+          message: "Either moduleKey or uri must be provided",
+        });
+      }
+
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post(
+        `/rest/api/3/dashboard/${dashboardId}/gadget`,
+        {
+          moduleKey,
+          uri,
+          color,
+          position,
+          title,
+          ignoreUriAndModuleKeyValidation,
+        }
+      );
+
+      return textResult({
+        success: true,
+        gadget: {
+          id: response.data.id,
+          moduleKey: response.data.moduleKey,
+          uri: response.data.uri,
+          color: response.data.color,
+          position: response.data.position,
+          title: response.data.title,
+        },
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+// ============================================================================
+// PHASE 10: ATTACHMENTS ENHANCED
+// ============================================================================
+
+server.registerTool(
+  "jira_upload_attachment",
+  {
+    title: "Upload Attachment",
+    description:
+      "Upload a file attachment to an issue. Requires the file path on the local filesystem.",
+    inputSchema: z.object({
+      issueIdOrKey: z.string().describe("Issue ID or key"),
+      filePath: z.string().describe("Absolute path to the file to upload"),
+      filename: z
+        .string()
+        .optional()
+        .describe("Override the filename (defaults to original filename)"),
+    }),
+  },
+  async ({ issueIdOrKey, filePath, filename }) => {
+    try {
+      const fs = await import("fs");
+      const path = await import("path");
+      const FormData = (await import("form-data")).default;
+
+      if (!fs.existsSync(filePath)) {
+        return textResult({
+          error: true,
+          message: `File not found: ${filePath}`,
+        });
+      }
+
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const form = new FormData();
+      const fileStream = fs.createReadStream(filePath);
+      const finalFilename = filename || path.basename(filePath);
+      form.append("file", fileStream, finalFilename);
+
+      const response = await client.post(
+        `/rest/api/3/issue/${issueIdOrKey}/attachments`,
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+            "X-Atlassian-Token": "no-check",
+          },
+        }
+      );
+
+      const attachments = response.data || [];
+      return textResult({
+        success: true,
+        attachments: attachments.map((a: any) => ({
+          id: a.id,
+          filename: a.filename,
+          size: a.size,
+          mimeType: a.mimeType,
+          created: a.created,
+          author: a.author?.displayName,
+          content: a.content,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_attachment_metadata",
+  {
+    title: "Get Attachment Metadata",
+    description: "Get metadata for a specific attachment by ID.",
+    inputSchema: z.object({
+      id: z.string().describe("Attachment ID"),
+    }),
+  },
+  async ({ id }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(`/rest/api/3/attachment/${id}`);
+
+      const a = response.data;
+      return textResult({
+        id: a.id,
+        filename: a.filename,
+        size: a.size,
+        mimeType: a.mimeType,
+        created: a.created,
+        author: a.author
+          ? { accountId: a.author.accountId, displayName: a.author.displayName }
+          : undefined,
+        content: a.content,
+        thumbnail: a.thumbnail,
+        self: a.self,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_get_attachment_content",
+  {
+    title: "Get Attachment Content",
+    description:
+      "Get the content/download URL for an attachment. Returns the redirect URL or content depending on redirect setting.",
+    inputSchema: z.object({
+      id: z.string().describe("Attachment ID"),
+      redirect: z
+        .boolean()
+        .optional()
+        .default(true)
+        .describe("Whether to return redirect URL (true) or follow redirect (false)"),
+    }),
+  },
+  async ({ id, redirect }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(`/rest/api/3/attachment/content/${id}`, {
+        params: { redirect },
+        maxRedirects: redirect ? 0 : 5,
+        validateStatus: (status) => status < 400 || status === 302,
+      });
+
+      if (response.status === 302 || response.headers.location) {
+        return textResult({
+          downloadUrl: response.headers.location || response.data,
+          message: "Use this URL to download the attachment content",
+        });
+      }
+
+      return textResult({
+        contentType: response.headers["content-type"],
+        contentLength: response.headers["content-length"],
+        message: "Content retrieved. For binary files, use the download URL instead.",
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+// ============================================================================
+// PHASE 11: LABELS MANAGEMENT
+// ============================================================================
+
+server.registerTool(
+  "jira_get_all_labels",
+  {
+    title: "Get All Labels",
+    description:
+      "Get all labels used across all issues in the Jira instance.",
+    inputSchema: z.object({
+      startAt: z.number().optional().default(0).describe("Index of first result"),
+      maxResults: z
+        .number()
+        .optional()
+        .default(1000)
+        .describe("Maximum results to return"),
+    }),
+  },
+  async ({ startAt, maxResults }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get("/rest/api/3/label", {
+        params: { startAt, maxResults },
+      });
+
+      return textResult({
+        total: response.data.total,
+        maxResults: response.data.maxResults,
+        startAt: response.data.startAt,
+        labels: response.data.values || [],
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_add_labels",
+  {
+    title: "Add/Set/Remove Labels",
+    description:
+      "Add, set, or remove labels on an issue. Use 'add' to append, 'set' to replace all, or 'remove' to delete specific labels.",
+    inputSchema: z.object({
+      issueIdOrKey: z.string().describe("Issue ID or key"),
+      labels: z.array(z.string()).min(1).describe("Labels to add/set/remove"),
+      operation: z
+        .enum(["add", "set", "remove"])
+        .default("add")
+        .describe("Operation: 'add' appends, 'set' replaces all, 'remove' deletes specified labels"),
+    }),
+  },
+  async ({ issueIdOrKey, labels, operation }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      let updatePayload: any;
+
+      if (operation === "set") {
+        updatePayload = {
+          fields: {
+            labels: labels,
+          },
+        };
+      } else {
+        updatePayload = {
+          update: {
+            labels: labels.map((label) => ({ [operation]: label })),
+          },
+        };
+      }
+
+      await client.put(`/rest/api/3/issue/${issueIdOrKey}`, updatePayload);
+
+      return textResult({
+        success: true,
+        message: `Labels ${operation === "add" ? "added to" : operation === "remove" ? "removed from" : "set on"} issue ${issueIdOrKey}`,
+        labels: labels,
+        operation: operation,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+// ============================================================================
+// PHASE 12: JQL TOOLS
+// ============================================================================
+
+server.registerTool(
+  "jira_autocomplete_jql",
+  {
+    title: "Autocomplete JQL",
+    description:
+      "Get autocomplete suggestions for JQL field values. Useful for building JQL queries interactively.",
+    inputSchema: z.object({
+      fieldName: z
+        .string()
+        .optional()
+        .describe("Field name to get value suggestions for (e.g., status, priority, assignee)"),
+      fieldValue: z
+        .string()
+        .optional()
+        .describe("Partial value to autocomplete"),
+      predicateName: z
+        .string()
+        .optional()
+        .describe("Predicate name for function suggestions"),
+      predicateValue: z
+        .string()
+        .optional()
+        .describe("Partial predicate value to autocomplete"),
+    }),
+  },
+  async ({ fieldName, fieldValue, predicateName, predicateValue }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.get(
+        "/rest/api/3/jql/autocompletedata/suggestions",
+        {
+          params: {
+            fieldName,
+            fieldValue,
+            predicateName,
+            predicateValue,
+          },
+        }
+      );
+
+      return textResult({
+        results: (response.data.results || []).map((r: any) => ({
+          value: r.value,
+          displayName: r.displayName,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_validate_jql",
+  {
+    title: "Validate JQL",
+    description:
+      "Validate one or more JQL queries for syntax and semantic correctness.",
+    inputSchema: z.object({
+      queries: z
+        .array(z.string())
+        .min(1)
+        .describe("JQL queries to validate"),
+      validation: z
+        .enum(["strict", "warn", "none"])
+        .optional()
+        .default("strict")
+        .describe("Validation level: strict (errors only), warn (errors and warnings), none (no validation)"),
+    }),
+  },
+  async ({ queries, validation }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post("/rest/api/3/jql/parse", {
+        queries,
+        validation,
+      });
+
+      return textResult({
+        queries: (response.data.queries || []).map((q: any) => ({
+          query: q.query,
+          errors: q.errors || [],
+          warnings: q.warnings || [],
+          isValid: !q.errors || q.errors.length === 0,
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
+  "jira_parse_jql",
+  {
+    title: "Parse JQL",
+    description:
+      "Parse JQL queries and return their abstract syntax tree (AST) structure. Useful for understanding query structure.",
+    inputSchema: z.object({
+      queries: z.array(z.string()).min(1).describe("JQL queries to parse"),
+      validation: z
+        .enum(["strict", "warn", "none"])
+        .optional()
+        .default("none")
+        .describe("Validation level"),
+    }),
+  },
+  async ({ queries, validation }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+
+      const response = await client.post("/rest/api/3/jql/parse", {
+        queries,
+        validation,
+      });
+
+      return textResult({
+        queries: (response.data.queries || []).map((q: any) => ({
+          query: q.query,
+          structure: q.structure,
+          errors: q.errors || [],
+        })),
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
 const transport = new StdioServerTransport();
 await server.connect(transport);

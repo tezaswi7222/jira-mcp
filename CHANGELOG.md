@@ -77,12 +77,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `jira_get_my_filters` - Get filters owned by current user
   - `jira_get_favourite_filters` - Get favourite filters
 
+- **Phase 8: Bulk Operations** (4 new tools)
+  - `jira_bulk_edit_issues` - Bulk edit multiple issues at once
+  - `jira_bulk_watch_issues` - Add watchers to multiple issues
+  - `jira_bulk_unwatch_issues` - Remove watchers from multiple issues
+  - `jira_get_bulk_operation_progress` - Track async bulk operation progress
+
+- **Phase 9: Dashboard Management** (5 new tools)
+  - `jira_get_dashboards` - Get dashboards (favourite/owned)
+  - `jira_search_dashboards` - Search dashboards by criteria
+  - `jira_get_dashboard` - Get dashboard details
+  - `jira_get_dashboard_gadgets` - Get gadgets on a dashboard
+  - `jira_add_dashboard_gadget` - Add a gadget to a dashboard
+
+- **Phase 10: Enhanced Attachments** (3 new tools)
+  - `jira_upload_attachment` - Upload files to issues
+  - `jira_get_attachment_metadata` - Get attachment metadata
+  - `jira_get_attachment_content` - Get attachment download URL
+
+- **Phase 11: Labels Management** (2 new tools)
+  - `jira_get_all_labels` - Get all labels in the instance
+  - `jira_add_labels` - Add, set, or remove labels on issues
+
+- **Phase 12: JQL Tools** (3 new tools)
+  - `jira_autocomplete_jql` - Get JQL autocomplete suggestions
+  - `jira_validate_jql` - Validate JQL query syntax
+  - `jira_parse_jql` - Parse JQL into AST structure
+
 ### Changed
 
 - Version bumped to 2.0.0 (major feature release)
 - Helper functions for field building (`buildIssueFields`, `buildUpdateOperations`)
 - Improved TypeScript strict mode compliance
-- Total tools: 57 (up from 18)
+- Total tools: 74 (up from 18)
 
 ---
 
@@ -132,8 +159,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Attachment upload support
-- Bulk operations
-- Dashboard management
-- Advanced JQL builder
 - Webhook integration
+- Time tracking reports
+- Burndown chart data
+- Release management
+- Custom field management

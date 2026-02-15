@@ -125,10 +125,28 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 
 </td>
 </tr>
+<tr>
+<td>
+
+### 📊 Bulk Operations
+- Bulk edit issues
+- Bulk watch/unwatch
+- Async operation tracking
+
+</td>
+<td>
+
+### 📈 Dashboards & JQL
+- Dashboard management
+- JQL validation & autocomplete
+- Labels management
+
+</td>
+</tr>
 </table>
 
 <p align="center">
-  <strong>57 Tools</strong> for comprehensive Jira management
+  <strong>74 Tools</strong> for comprehensive Jira management
 </p>
 
 ## 🚀 Quick Start
@@ -366,7 +384,7 @@ For OAuth authentication:
 
 ## 🛠️ Available Tools
 
-> **57 tools** organised into 10 categories
+> **74 tools** organised into 14 categories
 
 ### 🔐 Authentication (7 tools)
 
@@ -467,17 +485,7 @@ For OAuth authentication:
 </details>
 
 <details>
-<summary><strong>📎 Attachments (2 tools)</strong></summary>
-
-| Tool | Description |
-|------|-------------|
-| `jira_get_attachments` | Get issue attachments |
-| `jira_delete_attachment` | Delete an attachment |
-
-</details>
-
-<details>
-<summary><strong>📊 Epic Management (4 tools)</strong></summary>
+<summary><strong> Epic Management (4 tools)</strong></summary>
 
 | Tool | Description |
 |------|-------------|
@@ -511,6 +519,65 @@ For OAuth authentication:
 | `jira_delete_filter` | Delete a filter |
 | `jira_get_my_filters` | Get filters owned by you |
 | `jira_get_favourite_filters` | Get favourite filters |
+
+</details>
+
+<details>
+<summary><strong>⚡ Bulk Operations (4 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_bulk_edit_issues` | Edit multiple issues at once (labels, assignee, priority, etc.) |
+| `jira_bulk_watch_issues` | Add watchers to multiple issues |
+| `jira_bulk_unwatch_issues` | Remove watchers from multiple issues |
+| `jira_get_bulk_operation_progress` | Track async bulk operation progress |
+
+</details>
+
+<details>
+<summary><strong>📊 Dashboard Management (5 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_get_dashboards` | Get dashboards (filter by favourite/owned) |
+| `jira_search_dashboards` | Search dashboards by name, owner, etc. |
+| `jira_get_dashboard` | Get dashboard details by ID |
+| `jira_get_dashboard_gadgets` | Get all gadgets on a dashboard |
+| `jira_add_dashboard_gadget` | Add a gadget to a dashboard |
+
+</details>
+
+<details>
+<summary><strong>📎 Enhanced Attachments (5 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_get_attachments` | Get issue attachments |
+| `jira_delete_attachment` | Delete an attachment |
+| `jira_upload_attachment` | Upload a file to an issue |
+| `jira_get_attachment_metadata` | Get attachment metadata by ID |
+| `jira_get_attachment_content` | Get attachment download URL |
+
+</details>
+
+<details>
+<summary><strong>🏷️ Labels Management (2 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_get_all_labels` | Get all labels in the Jira instance |
+| `jira_add_labels` | Add, set, or remove labels on an issue |
+
+</details>
+
+<details>
+<summary><strong>🔎 JQL Tools (3 tools)</strong></summary>
+
+| Tool | Description |
+|------|-------------|
+| `jira_autocomplete_jql` | Get autocomplete suggestions for JQL fields |
+| `jira_validate_jql` | Validate JQL queries for syntax errors |
+| `jira_parse_jql` | Parse JQL into abstract syntax tree |
 
 </details>
 
@@ -633,7 +700,7 @@ The issue or project doesn't exist, or you don't have access to view it.
 | Node.js | ≥18.0.0 |
 | TypeScript | ≥5.0.0 |
 | Module | ES Modules |
-| Tools | **57** |
+| Tools | **74** |
 
 ### Dependencies
 
@@ -658,9 +725,14 @@ The issue or project doesn't exist, or you don't have access to view it.
 - **Epic Management** - Organise issues under epics
 - **Filters** - Create and manage saved JQL filters
 - **Metadata** - Access field configurations and create metadata
+- **Bulk Operations** - Edit, watch, unwatch multiple issues at once
+- **Dashboard Management** - View and manage Jira dashboards and gadgets
+- **Enhanced Attachments** - Upload attachments, get metadata and content
+- **Labels Management** - Get all labels, bulk add/remove/set labels
+- **JQL Tools** - Autocomplete, validate, and parse JQL queries
 
 ### Changed
-- Total tools increased from 18 to 57
+- Total tools increased from 18 to 74
 - Improved TypeScript strict mode compliance
 - Enhanced error handling and validation
 

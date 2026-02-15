@@ -6,6 +6,7 @@ We release patches for security vulnerabilities in the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 2.x.x   | :white_check_mark: |
 | 1.x.x   | :white_check_mark: |
 | < 1.0   | :x:                |
 
@@ -126,6 +127,15 @@ When using OAuth 2.0:
 - Tokens can be cleared using `jira_clear_auth`
 
 ## Audit Trail
+
+### Version 2.0.0
+
+- Security review for bulk operations
+- Validated file upload security (attachment uploads)
+- Ensured dashboard access respects Jira permissions
+- JQL validation prevents injection attacks
+- Bulk operation limits enforced (max 1000 issues)
+- All new endpoints use authenticated requests only
 
 ### Version 1.0.0
 

@@ -1,5 +1,6 @@
 # Automated semantic release workflow
 # Automatically versions and publishes based on conventional commits
+# Uses OIDC Trusted Publishing - no NPM_TOKEN required
 
 name: Release
 
@@ -19,7 +20,7 @@ jobs:
       contents: write      # To push changelog and version updates
       issues: write        # To comment on issues
       pull-requests: write # To comment on PRs
-      id-token: write      # For npm provenance
+      id-token: write      # For npm OIDC provenance
     
     steps:
       - name: Checkout repository
@@ -44,5 +45,6 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: npx semantic-release

@@ -35,13 +35,8 @@
     "prebuild": "npm run clean",
     "prepublishOnly": "npm run build",
     "prepack": "npm run build",
-    "version": "npm run build",
-    "postversion": "git push && git push --tags",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack:dry": "npm pack --dry-run",
-    "release:patch": "npm version patch -m \"chore(release): %s\"",
-    "release:minor": "npm version minor -m \"chore(release): %s\"",
-    "release:major": "npm version major -m \"chore(release): %s\""
+    "pack:dry": "npm pack --dry-run"
   },
   "keywords": [
     "jira",

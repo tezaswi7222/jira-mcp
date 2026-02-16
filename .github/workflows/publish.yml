@@ -27,7 +27,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for semantic-release to analyze commits
-          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup SSH for deploy key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Configure Git for SSH
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin git@github.com:tezaswi7222/jira-mcp.git
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,11 +51,6 @@ jobs:
 
       - name: Run build
         run: npm run build
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Semantic Release
         env:

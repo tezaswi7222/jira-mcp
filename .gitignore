@@ -58,3 +58,6 @@ coverage/
 # Internal planning documents (removed from history)
 FEATURE_ROADMAP.md
 IMPLEMENTATION_PLAN.md
+
+jira-mcp-deploy
+jira-mcp-deploy.pub

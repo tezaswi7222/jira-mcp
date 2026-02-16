@@ -146,7 +146,7 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 </table>
 
 <p align="center">
-  <strong>78 Tools</strong> for comprehensive Jira management
+  <strong>73 Tools</strong> for comprehensive Jira management
 </p>
 
 ## 🚀 Quick Start
@@ -384,7 +384,7 @@ For OAuth authentication:
 
 ## 🛠️ Available Tools
 
-> **78 tools** organised into 15 categories
+> **73 tools** organised into 14 categories
 
 ### 🔐 Authentication (7 tools)
 
@@ -398,13 +398,12 @@ For OAuth authentication:
 | `jira_oauth_refresh` | Manually refresh OAuth token |
 | `jira_oauth_list_sites` | List accessible Jira sites |
 
-### 📝 Issue CRUD (6 tools)
+### 📝 Issue CRUD (5 tools)
 
 | Tool | Description |
 |------|-------------|
 | `jira_create_issue` | Create a new issue with full field support |
 | `jira_update_issue` | Update issue fields (partial update supported) |
-| `jira_delete_issue` | Delete an issue (with safety confirmation) |
 | `jira_assign_issue` | Assign or unassign a user |
 | `jira_get_transitions` | Get available workflow transitions |
 | `jira_transition_issue` | Move issue through workflow states |
@@ -444,7 +443,7 @@ For OAuth authentication:
 | `jira_get_changelog` | Get issue change history |
 
 <details>
-<summary><strong>🏃 Agile/Sprint Tools (16 tools)</strong></summary>
+<summary><strong>🏃 Agile/Sprint Tools (15 tools)</strong></summary>
 
 | Tool | Description |
 |------|-------------|
@@ -457,7 +456,6 @@ For OAuth authentication:
 | `jira_update_sprint` | Update sprint details |
 | `jira_start_sprint` | Start a future sprint |
 | `jira_complete_sprint` | Complete an active sprint |
-| `jira_delete_sprint` | Delete a sprint |
 | `jira_get_sprint_issues` | Get issues in a sprint |
 | `jira_move_issues_to_sprint` | Move issues to a sprint |
 | `jira_get_backlog_issues` | Get backlog issues for a board |
@@ -467,13 +465,12 @@ For OAuth authentication:
 </details>
 
 <details>
-<summary><strong>🔗 Issue Relationships (11 tools)</strong></summary>
+<summary><strong>🔗 Issue Relationships (9 tools)</strong></summary>
 
 | Tool | Description |
 |------|-------------|
 | `jira_get_issue_links` | Get linked issues |
 | `jira_create_issue_link` | Link two issues together |
-| `jira_delete_issue_link` | Remove an issue link |
 | `jira_get_link_types` | Get available link types |
 | `jira_get_watchers` | Get issue watchers |
 | `jira_add_watcher` | Add a watcher to an issue |
@@ -508,7 +505,7 @@ For OAuth authentication:
 </details>
 
 <details>
-<summary><strong>🗄️ Filters (7 tools)</strong></summary>
+<summary><strong>🗄️ Filters (6 tools)</strong></summary>
 
 | Tool | Description |
 |------|-------------|
@@ -516,7 +513,6 @@ For OAuth authentication:
 | `jira_get_filter` | Get filter details |
 | `jira_create_filter` | Create a new saved filter |
 | `jira_update_filter` | Update an existing filter |
-| `jira_delete_filter` | Delete a filter |
 | `jira_get_my_filters` | Get filters owned by you |
 | `jira_get_favourite_filters` | Get favourite filters |
 
@@ -548,12 +544,11 @@ For OAuth authentication:
 </details>
 
 <details>
-<summary><strong>📎 Enhanced Attachments (5 tools)</strong></summary>
+<summary><strong>📎 Enhanced Attachments (4 tools)</strong></summary>
 
 | Tool | Description |
 |------|-------------|
 | `jira_get_attachments` | Get issue attachments |
-| `jira_delete_attachment` | Delete an attachment |
 | `jira_upload_attachment` | Upload a file to an issue |
 | `jira_get_attachment_metadata` | Get attachment metadata by ID |
 | `jira_get_attachment_content` | Get attachment download URL |
@@ -599,7 +594,7 @@ This release underwent a comprehensive audit to ensure best practices and securi
 
 | Category | Status | Details |
 |----------|:------:|---------|
-| **API Version** | ✅ | All 78 tools use Jira REST API v3 (latest) |
+| **API Version** | ✅ | All 73 tools use Jira REST API v3 (latest) |
 | **Agile API** | ✅ | Sprint/Board tools use Jira Agile API v1.0 |
 | **Deprecated APIs** | ✅ | All deprecated endpoints migrated to modern alternatives |
 | **Security Vulnerabilities** | ✅ | 0 vulnerabilities (axios & qs patched) |
@@ -747,7 +742,7 @@ The issue or project doesn't exist, or you don't have access to view it.
 ### Added
 - **Issue CRUD** - Create, update, delete issues with full field support
 - **Workflow Transitions** - Move issues through workflow states
-- **Agile/Scrum** - Complete sprint and board management (16 tools)
+- **Agile/Scrum** - Complete sprint and board management (15 tools)
 - **Issue Linking** - Blocks, relates, duplicates relationships
 - **Watchers & Voting** - Collaboration features
 - **Epic Management** - Organise issues under epics

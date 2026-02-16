@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+
+- **BREAKING CHANGE: Destructive Tools Removed for Safety**
+  - `jira_delete_issue` - Permanent issue deletion (use Jira web interface)
+  - `jira_delete_sprint` - Sprint deletion (use Jira web interface)
+  - `jira_delete_attachment` - Attachment deletion (use Jira web interface)
+  - `jira_delete_filter` - Filter deletion (use Jira web interface)
+  - `jira_delete_issue_link` - Issue link removal (use Jira web interface)
+
+### Changed
+
+- Total tool count reduced from 78 to 73 tools
+- Improved safety by removing all destructive operations
+
+### Added
+
+- **CI/CD: Automated Releases with semantic-release**
+  - Automatic version bumping based on conventional commits
+  - Auto-generated CHANGELOG from commit messages
+  - GitHub releases created automatically
+  - npm publishing on every release
+
 ## [2.2.1] - 2026-02-15
 
 ### Added

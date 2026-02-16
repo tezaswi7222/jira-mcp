@@ -1750,52 +1750,6 @@ server.registerTool(
   }
 );
 
-// ============ Phase 1.3: Delete Issue ============
-
-server.registerTool(
-  "jira_delete_issue",
-  {
-    title: "Delete Jira Issue",
-    description:
-      "Delete a Jira issue. Requires explicit confirmation. Use with caution - this action cannot be undone.",
-    inputSchema: z.object({
-      issueIdOrKey: z.string().min(1).describe("Issue key or ID to delete"),
-      deleteSubtasks: z.boolean().optional().default(false).describe("Also delete subtasks"),
-      confirmDelete: z.boolean().describe("Must be true to confirm deletion"),
-    }),
-  },
-  async ({ issueIdOrKey, deleteSubtasks, confirmDelete }) => {
-    try {
-      if (!confirmDelete) {
-        return textResult({
-          error: "confirmation_required",
-          message: "Deletion not confirmed. Set confirmDelete: true to proceed. This action cannot be undone.",
-          issueKey: issueIdOrKey,
-        });
-      }
-
-      const auth = await getAuthOrThrow();
-      const client = createClient(auth);
-
-      await client.delete(
-        `/rest/api/3/issue/${encodeURIComponent(issueIdOrKey)}`,
-        {
-          params: {
-            deleteSubtasks: deleteSubtasks ?? false,
-          },
-        }
-      );
-
-      return textResult({
-        success: true,
-        message: `Issue ${issueIdOrKey} deleted successfully${deleteSubtasks ? " (including subtasks)" : ""}`,
-      });
-    } catch (error) {
-      return textResult(errorToResult(error));
-    }
-  }
-);
-
 // ============ Phase 1.4: Assign Issue ============
 
 server.registerTool(
@@ -2608,42 +2562,6 @@ server.registerTool(
 );
 
 server.registerTool(
-  "jira_delete_sprint",
-  {
-    title: "Delete Sprint",
-    description:
-      "Delete a sprint. Use with caution - cannot be undone.",
-    inputSchema: z.object({
-      sprintId: z.number().int().positive().describe("Sprint ID to delete"),
-      confirmDelete: z.boolean().describe("Must be true to confirm deletion"),
-    }),
-  },
-  async ({ sprintId, confirmDelete }) => {
-    try {
-      if (!confirmDelete) {
-        return textResult({
-          error: "confirmation_required",
-          message: "Deletion not confirmed. Set confirmDelete: true to proceed.",
-          sprintId,
-        });
-      }
-
-      const auth = await getAuthOrThrow();
-      const client = createClient(auth);
-
-      await client.delete(`/rest/agile/1.0/sprint/${sprintId}`);
-
-      return textResult({
-        success: true,
-        message: `Sprint ${sprintId} deleted successfully`,
-      });
-    } catch (error) {
-      return textResult(errorToResult(error));
-    }
-  }
-);
-
-server.registerTool(
   "jira_get_sprint_issues",
   {
     title: "Get Sprint Issues",
@@ -2959,33 +2877,6 @@ server.registerTool(
 );
 
 server.registerTool(
-  "jira_delete_issue_link",
-  {
-    title: "Delete Issue Link",
-    description:
-      "Remove a link between issues.",
-    inputSchema: z.object({
-      linkId: z.string().min(1).describe("Link ID to delete (get from jira_get_issue_links)"),
-    }),
-  },
-  async ({ linkId }) => {
-    try {
-      const auth = await getAuthOrThrow();
-      const client = createClient(auth);
-
-      await client.delete(`/rest/api/3/issueLink/${linkId}`);
-
-      return textResult({
-        success: true,
-        message: `Link ${linkId} deleted successfully`,
-      });
-    } catch (error) {
-      return textResult(errorToResult(error));
-    }
-  }
-);
-
-server.registerTool(
   "jira_get_link_types",
   {
     title: "Get Issue Link Types",
@@ -3264,33 +3155,6 @@ server.registerTool(
       return textResult({
         issueKey: issueIdOrKey,
         attachments,
-      });
-    } catch (error) {
-      return textResult(errorToResult(error));
-    }
-  }
-);
-
-server.registerTool(
-  "jira_delete_attachment",
-  {
-    title: "Delete Attachment",
-    description:
-      "Delete an attachment from an issue.",
-    inputSchema: z.object({
-      attachmentId: z.string().min(1).describe("Attachment ID to delete"),
-    }),
-  },
-  async ({ attachmentId }) => {
-    try {
-      const auth = await getAuthOrThrow();
-      const client = createClient(auth);
-
-      await client.delete(`/rest/api/3/attachment/${attachmentId}`);
-
-      return textResult({
-        success: true,
-        message: `Attachment ${attachmentId} deleted successfully`,
       });
     } catch (error) {
       return textResult(errorToResult(error));
@@ -3737,42 +3601,6 @@ server.registerTool(
         id: response.data?.id ?? filterId,
         name: response.data?.name,
         message: `Filter updated successfully`,
-      });
-    } catch (error) {
-      return textResult(errorToResult(error));
-    }
-  }
-);
-
-server.registerTool(
-  "jira_delete_filter",
-  {
-    title: "Delete Filter",
-    description:
-      "Delete a saved filter.",
-    inputSchema: z.object({
-      filterId: z.string().min(1).describe("Filter ID to delete"),
-      confirmDelete: z.boolean().describe("Must be true to confirm deletion"),
-    }),
-  },
-  async ({ filterId, confirmDelete }) => {
-    try {
-      if (!confirmDelete) {
-        return textResult({
-          error: "confirmation_required",
-          message: "Deletion not confirmed. Set confirmDelete: true to proceed.",
-          filterId,
-        });
-      }
-
-      const auth = await getAuthOrThrow();
-      const client = createClient(auth);
-
-      await client.delete(`/rest/api/3/filter/${filterId}`);
-
-      return textResult({
-        success: true,
-        message: `Filter ${filterId} deleted successfully`,
       });
     } catch (error) {
       return textResult(errorToResult(error));

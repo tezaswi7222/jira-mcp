@@ -1,3 +1,9 @@
+## [3.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.0.0...v3.1.0) (2026-02-17)
+
+### ✨ Features
+
+* add jira_get_user_worklogs tool for querying worklogs by user and date range ([fa653ba](https://github.com/tezaswi7222/jira-mcp/commit/fa653baa24b18afc1faf6dbe56c46315ee6f63ff))
+
 ## [3.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v2.0.5...v3.0.0) (2026-02-17)
 
 ### ⚠ BREAKING CHANGES

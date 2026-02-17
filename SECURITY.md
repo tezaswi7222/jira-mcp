@@ -6,8 +6,9 @@ We release patches for security vulnerabilities in the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 3.x.x   | :white_check_mark: |
 | 2.x.x   | :white_check_mark: |
-| 1.x.x   | :white_check_mark: |
+| 1.x.x   | :x:                |
 | < 1.0   | :x:                |
 
 ## Reporting a Vulnerability
@@ -127,6 +128,15 @@ When using OAuth 2.0:
 - Tokens can be cleared using `jira_clear_auth`
 
 ## Audit Trail
+
+### Version 3.0.0
+
+- **Removed destructive delete tools** for safety (jira_delete_issue, jira_delete_sprint, etc.)
+- **Security patches** - Updated axios and qs dependencies to latest secure versions
+- **Deprecated API migration** - Replaced deprecated `/createmeta` endpoint
+- **0 known vulnerabilities** - Verified with `npm audit`
+- Enhanced `.gitignore` and `.npmignore` with comprehensive sensitive file patterns
+- Added protection for SSH keys, OAuth tokens, certificates, and credential files
 
 ### Version 2.0.0
 

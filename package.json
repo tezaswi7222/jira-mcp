@@ -1,6 +1,6 @@
 {
   "name": "mcp-jira-cloud",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "A Model Context Protocol (MCP) server for Jira Cloud integration. Enables AI assistants like GitHub Copilot and Claude to search issues, manage tickets, log work, handle sprints, and interact with your Jira instance seamlessly. Features 73 tools for comprehensive Jira management.",
   "type": "module",
   "main": "dist/index.js",

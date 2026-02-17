@@ -1,3 +1,35 @@
+## [3.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v2.0.5...v3.0.0) (2026-02-17)
+
+### ⚠ BREAKING CHANGES
+
+* The following tools have been removed to prevent accidental data loss:
+- jira_delete_issue (permanent issue deletion)
+- jira_delete_sprint (sprint deletion)
+- jira_delete_attachment (attachment deletion)
+- jira_delete_filter (filter deletion)
+- jira_delete_issue_link (link removal)
+
+Users requiring delete functionality should use the Jira web interface.
+Total tools reduced from 78 to 73.
+
+Updated documentation:
+- README.md: Updated tool counts and removed deleted tool references
+- CHANGELOG.md: Added [Unreleased] section documenting removals
+- package.json: Updated description with new tool count
+
+### ✨ Features
+
+* add Phase 13 Time Tracking Reports (78 tools) - jira_get_user_worklogs for user worklog reports by date range ([878ea04](https://github.com/tezaswi7222/jira-mcp/commit/878ea042967f601fd0795963e7df01fa8e1143f3))
+* remove destructive delete tools for safety ([ad40090](https://github.com/tezaswi7222/jira-mcp/commit/ad400900792f13a95323ed85bb1a727bd0dd5c0d))
+
+### 🐛 Bug Fixes
+
+* add semantic-release plugins to devDependencies ([1955510](https://github.com/tezaswi7222/jira-mcp/commit/19555101284852b7a98f92d826b71fb3c37fb931))
+* **ci:** remove conflicting npm scripts and fix git credentials ([79240ee](https://github.com/tezaswi7222/jira-mcp/commit/79240eef7b0a7e0c117c94c6ab80136a8a7df95a))
+* **ci:** use deploy key for branch protection bypass ([37b4af8](https://github.com/tezaswi7222/jira-mcp/commit/37b4af83efcd29f067db8094f793dae6716bab5f))
+* **ci:** use GH_ACTION_TOKEN PAT for branch protection bypass ([f46ecdd](https://github.com/tezaswi7222/jira-mcp/commit/f46ecdd8030c4668f02942408200e2f41d545606))
+* update deprecated createmeta API and patch security vulnerabilities ([3a98dd0](https://github.com/tezaswi7222/jira-mcp/commit/3a98dd01059b41bb86f4f8467ea064e37a31d093))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.

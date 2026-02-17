@@ -1,3 +1,9 @@
+## [3.1.1](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.0...v3.1.1) (2026-02-17)
+
+### 🐛 Bug Fixes
+
+* remove .default() from zod schema in jira_get_user_worklogs ([7620b45](https://github.com/tezaswi7222/jira-mcp/commit/7620b451b581a50023c2d8ee896cc02f8ee3064d))
+
 ## [3.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.0.0...v3.1.0) (2026-02-17)
 
 ### ✨ Features

@@ -157,10 +157,10 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 npm install -g mcp-jira-cloud
 ```
 
-Or use directly with `npx`:
+Or use directly with `npx` (always gets latest version):
 
 ```bash
-npx mcp-jira-cloud
+npx -y mcp-jira-cloud@latest
 ```
 
 ### Get Your API Token
@@ -175,7 +175,7 @@ There are two ways to run the MCP server:
 
 | Method | Command | Best For |
 |--------|---------|----------|
-| **npx** (no install) | `npx mcp-jira-cloud` | Quick setup, always latest version |
+| **npx** (no install) | `npx -y mcp-jira-cloud@latest` | Quick setup, always latest version |
 | **Global install** | `jira-mcp` | Faster startup, offline usage |
 
 ---
@@ -191,7 +191,7 @@ Create or edit `.vscode/mcp.json` in your workspace:
     "jira": {
       "type": "stdio",
       "command": "npx",
-      "args": ["mcp-jira-cloud"],
+      "args": ["-y", "mcp-jira-cloud@latest"],
       "env": {
         "JIRA_BASE_URL": "https://your-domain.atlassian.net",
         "JIRA_EMAIL": "your-email@example.com",
@@ -232,7 +232,7 @@ Add to your Claude configuration (`claude_desktop_config.json`):
   "mcpServers": {
     "jira": {
       "command": "npx",
-      "args": ["mcp-jira-cloud"],
+      "args": ["-y", "mcp-jira-cloud@latest"],
       "env": {
         "JIRA_BASE_URL": "https://your-domain.atlassian.net",
         "JIRA_EMAIL": "your-email@example.com",
@@ -272,7 +272,7 @@ Create `.cursor/mcp.json` in your project or home directory:
   "mcpServers": {
     "jira": {
       "command": "npx",
-      "args": ["mcp-jira-cloud"],
+      "args": ["-y", "mcp-jira-cloud@latest"],
       "env": {
         "JIRA_BASE_URL": "https://your-domain.atlassian.net",
         "JIRA_EMAIL": "your-email@example.com",
@@ -312,7 +312,7 @@ Add to your Windsurf MCP configuration:
   "mcpServers": {
     "jira": {
       "command": "npx",
-      "args": ["mcp-jira-cloud"],
+      "args": ["-y", "mcp-jira-cloud@latest"],
       "env": {
         "JIRA_BASE_URL": "https://your-domain.atlassian.net",
         "JIRA_EMAIL": "your-email@example.com",

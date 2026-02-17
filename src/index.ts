@@ -1103,9 +1103,11 @@ server.registerTool(
 server.registerTool(
   "jira_get_issue",
   {
-    title: "Get Jira Issue",
+    title: "Get Jira Issue (Full Details)",
     description:
-      "Get the full details of a Jira issue when the user mentions an issue key like PROJ-123 or asks about a specific ticket.",
+      "Get FULL details of a specific issue by key (e.g., PROJ-123). " +
+      "Use when user asks: 'tell me about PROJ-123', 'what's the status of ABC-456', 'show me ticket XYZ-789'. " +
+      "Returns all fields including description, comments count, assignee, priority, etc.",
     inputSchema: z.object({
       issueIdOrKey: z.string().min(1),
       fields: z.array(z.string()).optional(),
@@ -1133,9 +1135,12 @@ server.registerTool(
 server.registerTool(
   "jira_search_issues",
   {
-    title: "Search Jira Issues",
+    title: "Search Jira Issues (Full Details)",
     description:
-      "Use when the user asks to find issues matching criteria (JQL), like 'my open bugs' or 'tickets updated this week'.",
+      "Search for issues using JQL with FULL field details. " +
+      "Use when user needs detailed results or specific fields like description, assignee, priority. " +
+      "Examples: 'find all bugs in PROJ with full details', 'search issues assigned to me with descriptions'. " +
+      "For quick overview with just key/summary/status, use jira_search_issues_summary instead.",
     inputSchema: z.object({
       jql: z.string().min(1),
       startAt: z.number().int().nonnegative().optional(),
@@ -1178,9 +1183,12 @@ server.registerTool(
 server.registerTool(
   "jira_search_issues_summary",
   {
-    title: "Search Jira Issues (Summary)",
+    title: "Search Jira Issues (Quick List)",
     description:
-      "Use when the user wants the top results for a Jira search and only needs key, summary, and status.",
+      "Search for issues using JQL returning only key, summary, and status. " +
+      "PREFERRED for most searches - faster and less verbose. " +
+      "Use for: 'list my open issues', 'show bugs in PROJ', 'find tickets updated today'. " +
+      "Only use jira_search_issues if user explicitly needs full details.",
     inputSchema: z.object({
       jql: z.string().min(1),
       maxResults: z.number().int().positive().max(50).optional(),
@@ -1288,7 +1296,9 @@ server.registerTool(
   {
     title: "Get Issue Summary",
     description:
-      "Use when the user wants the summary, description, and acceptance criteria for a specific issue key.",
+      "Get just the summary, description, and acceptance criteria for an issue. " +
+      "Use when user wants to understand what a ticket is about. " +
+      "Examples: 'what does PROJ-123 need', 'show acceptance criteria for ABC-456'.",
     inputSchema: z.object({
       issueIdOrKey: z.string().min(1),
     }),
@@ -1314,7 +1324,9 @@ server.registerTool(
   {
     title: "Get My Open Issues",
     description:
-      "Use when the user asks for their open tickets or what they should work on next.",
+      "Get issues assigned to the CURRENT USER that are not done. " +
+      "Use when user asks: 'show my tickets', 'what am I working on', 'my open issues', 'what should I do next'. " +
+      "Do NOT use for other users - use jira_search_issues with assignee filter instead.",
     inputSchema: z.object({
       maxResults: z.number().int().positive().max(50).optional(),
     }),
@@ -1471,7 +1483,10 @@ server.registerTool(
   {
     title: "Get Issue Work Logs",
     description:
-      "Use when the user wants to see work logs recorded on a specific Jira issue/ticket.",
+      "Get work logs recorded on a SPECIFIC Jira issue/ticket. " +
+      "Use when the user mentions a specific issue key like PROJ-123 and wants to see time logged on it. " +
+      "Examples: 'show worklogs on PROJ-123', 'how much time logged on ABC-456', 'who worked on this ticket'. " +
+      "Do NOT use for user timesheet reports - use jira_get_user_worklogs instead.",
     inputSchema: z.object({
       issueIdOrKey: z.string().min(1).describe("The issue key (e.g., PROJ-123) to get work logs for"),
       startAt: z.number().int().nonnegative().optional(),
@@ -4651,9 +4666,12 @@ server.registerTool(
 server.registerTool(
   "jira_get_user_worklogs",
   {
-    title: "Get User Worklogs",
+    title: "Get User Worklogs (Timesheet)",
     description:
-      "Get all worklogs for a specific user within a date range. Combines worklog discovery and filtering to provide a complete time tracking report for a person.",
+      "Get a USER's time tracking report across ALL issues within a date range. " +
+      "Use for timesheet reports, weekly/monthly summaries, or 'how much did X log this week'. " +
+      "Examples: 'show my worklogs this week', 'how much time did John log in January', 'my timesheet for last 7 days'. " +
+      "Do NOT use for worklogs on a specific issue - use jira_get_issue_worklogs instead.",
     inputSchema: z.object({
       accountId: z
         .string()

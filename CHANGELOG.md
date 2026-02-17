@@ -1,3 +1,17 @@
+## [4.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.1...v4.0.0) (2026-02-17)
+
+### ⚠ BREAKING CHANGES
+
+* jira_get_worklogs renamed to jira_get_issue_worklogs for clarity
+
+- Removed duplicate jira_get_user_worklogs registration that caused startup error
+- Renamed jira_get_worklogs to jira_get_issue_worklogs to match naming pattern
+- Updated README documentation
+
+### 🐛 Bug Fixes
+
+* remove duplicate jira_get_user_worklogs and rename jira_get_worklogs ([40cfa95](https://github.com/tezaswi7222/jira-mcp/commit/40cfa958905a09a130d6f6bbdb36942db2c6fe05))
+
 ## [3.1.1](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.0...v3.1.1) (2026-02-17)
 
 ### 🐛 Bug Fixes

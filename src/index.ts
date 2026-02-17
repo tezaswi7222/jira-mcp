@@ -1527,10 +1527,11 @@ server.registerTool(
       startDate: z.string().describe("Start date in YYYY-MM-DD format"),
       endDate: z.string().describe("End date in YYYY-MM-DD format"),
       projectKey: z.string().optional().describe("Optional project key to filter results (e.g., PROJ)"),
-      maxResults: z.number().int().positive().max(100).optional().default(50).describe("Maximum number of issues to search (default 50)"),
+      maxResults: z.number().int().positive().max(100).optional().describe("Maximum number of issues to search (default 50)"),
     }),
   },
-  async ({ username, startDate, endDate, projectKey, maxResults = 50 }) => {
+  async ({ username, startDate, endDate, projectKey, maxResults }) => {
+    const effectiveMaxResults = maxResults ?? 50;
     try {
       const auth = await getAuthOrThrow();
       const client = createClient(auth);
@@ -1546,7 +1547,7 @@ server.registerTool(
       const searchResponse = await client.get("/rest/api/3/search", {
         params: {
           jql,
-          maxResults,
+          maxResults: effectiveMaxResults,
           fields: "key,summary",
         },
       });

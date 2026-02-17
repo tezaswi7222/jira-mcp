@@ -49,15 +49,33 @@ yarn-error.log*
 coverage/
 .nyc_output/
 
-# Secrets and keys
+# Secrets and keys (NEVER commit these!)
 *.pem
 *.key
 *.p12
 *.pfx
+*.crt
+*.cer
+*_rsa
+*_ed25519
+*_ecdsa
+*_dsa
+id_rsa*
+id_ed25519*
+id_ecdsa*
+
+# OAuth tokens and credentials
+*token*.json
+*credential*.json
+*secret*.json
+oauth*.json
+auth*.json
+
+# Deploy keys (generated for CI)
+jira-mcp-deploy
+jira-mcp-deploy.pub
+*.deploy.key
 
 # Internal planning documents (removed from history)
 FEATURE_ROADMAP.md
 IMPLEMENTATION_PLAN.md
-
-jira-mcp-deploy
-jira-mcp-deploy.pub

@@ -1,3 +1,9 @@
+## [4.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.0.0...v4.1.0) (2026-02-17)
+
+### ✨ Features
+
+* improve tool descriptions for better AI agent selection ([6cfdd2f](https://github.com/tezaswi7222/jira-mcp/commit/6cfdd2f84d8dc6eec7d55db2d6d111ffaadf78a6))
+
 ## [4.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.1...v4.0.0) (2026-02-17)
 
 ### ⚠ BREAKING CHANGES

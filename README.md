@@ -720,12 +720,12 @@ The issue or project doesn't exist, or you don't have access to view it.
 | Attribute | Value |
 |-----------|-------|
 | Package name | [`mcp-jira-cloud`](https://www.npmjs.com/package/mcp-jira-cloud) |
-| Version | **2.2.0** |
+| Latest Version | ![npm version](https://img.shields.io/npm/v/mcp-jira-cloud?style=flat-square) |
 | License | [MIT](LICENSE) |
 | Node.js | ≥18.0.0 |
 | TypeScript | ≥5.0.0 |
 | Module | ES Modules |
-| Tools | **78** |
+| Tools | **74** |
 
 ### Dependencies
 
@@ -736,13 +736,57 @@ The issue or project doesn't exist, or you don't have access to view it.
 | [`keytar`](https://www.npmjs.com/package/keytar) | Secure credential storage |
 | [`zod`](https://www.npmjs.com/package/zod) | Schema validation |
 
-## 🆕 What's New in v2.0.0
+## 🆕 What's New
+
+### 🚀 v3.1.0 (Latest)
+
+| Feature | Description |
+|---------|-------------|
+| 🔍 **User Worklogs Query** | New `jira_get_user_worklogs` tool to query worklogs by user and date range |
+| 📊 **Time Summary** | Returns total time logged with formatted hours/minutes |
+
+**Total tools: 74**
+
+---
+
+### ⚠️ v3.0.0 (Breaking Changes)
+
+<table>
+<tr><td>
+
+**Removed for Safety:**
+- `jira_delete_issue`
+- `jira_delete_sprint`
+- `jira_delete_attachment`
+- `jira_delete_filter`
+- `jira_delete_issue_link`
+
+</td><td>
+
+**Improvements:**
+- 🔒 Security patches (axios, qs)
+- 🔄 Deprecated API migration
+- ✅ 0 known vulnerabilities
+
+</td></tr>
+</table>
+
+---
 
 <details>
-<summary><strong>Click to see full changelog</strong></summary>
+<summary><strong>📅 v2.x Changelog</strong></summary>
 
-### Added
-- **Issue CRUD** - Create, update, delete issues with full field support
+### v2.2.0
+- **Time Tracking Reports** - Get user worklogs for any date range with summaries
+
+### v2.1.0
+- **Dashboard Management** - View and manage Jira dashboards and gadgets
+- **Enhanced Attachments** - Upload attachments, get metadata and content
+- **Labels Management** - Get all labels, bulk add/remove/set labels
+- **JQL Tools** - Autocomplete, validate, and parse JQL queries
+
+### v2.0.0
+- **Issue CRUD** - Create, update issues with full field support
 - **Workflow Transitions** - Move issues through workflow states
 - **Agile/Scrum** - Complete sprint and board management (15 tools)
 - **Issue Linking** - Blocks, relates, duplicates relationships
@@ -751,16 +795,6 @@ The issue or project doesn't exist, or you don't have access to view it.
 - **Filters** - Create and manage saved JQL filters
 - **Metadata** - Access field configurations and create metadata
 - **Bulk Operations** - Edit, watch, unwatch multiple issues at once
-- **Dashboard Management** - View and manage Jira dashboards and gadgets
-- **Enhanced Attachments** - Upload attachments, get metadata and content
-- **Labels Management** - Get all labels, bulk add/remove/set labels
-- **JQL Tools** - Autocomplete, validate, and parse JQL queries
-- **Time Tracking Reports** - Get user worklogs for any date range with summaries
-
-### Changed
-- Total tools increased from 18 to 78
-- Improved TypeScript strict mode compliance
-- Enhanced error handling and validation
 
 </details>
 

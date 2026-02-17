@@ -596,7 +596,7 @@ This release underwent a comprehensive audit to ensure best practices and securi
 
 | Category | Status | Details |
 |----------|:------:|---------|
-| **API Version** | ✅ | All 73 tools use Jira REST API v3 (latest) |
+| **API Version** | ✅ | All 74 tools use Jira REST API v3 (latest) |
 | **Agile API** | ✅ | Sprint/Board tools use Jira Agile API v1.0 |
 | **Deprecated APIs** | ✅ | All deprecated endpoints migrated to modern alternatives |
 | **Security Vulnerabilities** | ✅ | 0 vulnerabilities (axios & qs patched) |
@@ -738,14 +738,23 @@ The issue or project doesn't exist, or you don't have access to view it.
 
 ## 🆕 What's New
 
-### 🚀 v3.1.0 (Latest)
+### 🚀 v4.0.0 (Latest)
+
+| Change | Description |
+|--------|-------------|
+| ⚠️ **Breaking** | `jira_get_worklogs` renamed to `jira_get_issue_worklogs` for clarity |
+| 🐛 **Fix** | Removed duplicate tool registration that caused startup errors |
+
+**Total tools: 74**
+
+---
+
+### 📦 v3.1.0
 
 | Feature | Description |
 |---------|-------------|
 | 🔍 **User Worklogs Query** | New `jira_get_user_worklogs` tool to query worklogs by user and date range |
 | 📊 **Time Summary** | Returns total time logged with formatted hours/minutes |
-
-**Total tools: 74**
 
 ---
 

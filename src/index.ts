@@ -1516,6 +1516,134 @@ server.registerTool(
 );
 
 server.registerTool(
+  "jira_get_user_worklogs",
+  {
+    title: "Get User Work Logs by Date Range",
+    description:
+      "Use when the user wants to see work logs recorded by a specific user within a date range. " +
+      "Searches for issues with worklogs by the specified user and date range using JQL worklogAuthor and worklogDate filters.",
+    inputSchema: z.object({
+      username: z.string().min(1).describe("The username or account ID of the user whose worklogs to retrieve"),
+      startDate: z.string().describe("Start date in YYYY-MM-DD format"),
+      endDate: z.string().describe("End date in YYYY-MM-DD format"),
+      projectKey: z.string().optional().describe("Optional project key to filter results (e.g., PROJ)"),
+      maxResults: z.number().int().positive().max(100).optional().default(50).describe("Maximum number of issues to search (default 50)"),
+    }),
+  },
+  async ({ username, startDate, endDate, projectKey, maxResults = 50 }) => {
+    try {
+      const auth = await getAuthOrThrow();
+      const client = createClient(auth);
+      
+      // Build JQL query with worklogAuthor and worklogDate filters
+      let jql = `worklogAuthor = "${username}" AND worklogDate >= "${startDate}" AND worklogDate <= "${endDate}"`;
+      if (projectKey) {
+        jql = `project = ${projectKey} AND ${jql}`;
+      }
+      jql += " ORDER BY updated DESC";
+      
+      // Search for issues matching the worklog criteria
+      const searchResponse = await client.get("/rest/api/3/search", {
+        params: {
+          jql,
+          maxResults,
+          fields: "key,summary",
+        },
+      });
+      
+      const issues = Array.isArray(searchResponse.data?.issues) ? searchResponse.data.issues : [];
+      
+      if (issues.length === 0) {
+        return textResult({
+          message: `No worklogs found for user "${username}" between ${startDate} and ${endDate}`,
+          totalWorklogs: 0,
+          totalTimeSpentSeconds: 0,
+          worklogs: [],
+        });
+      }
+      
+      // Fetch worklogs for each issue and filter by user and date range
+      const allWorklogs: Array<{
+        issueKey: string;
+        issueSummary: string;
+        id: string;
+        author: string;
+        timeSpent: string;
+        timeSpentSeconds: number;
+        started: string;
+        comment: string;
+      }> = [];
+      
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      endDateObj.setHours(23, 59, 59, 999); // Include entire end date
+      
+      for (const issue of issues) {
+        const issueKey = issue.key;
+        const issueSummary = issue.fields?.summary ?? "";
+        
+        try {
+          const worklogResponse = await client.get(
+            `/rest/api/3/issue/${encodeURIComponent(issueKey)}/worklog`,
+            { params: { maxResults: 1000 } }
+          );
+          
+          const worklogs = Array.isArray(worklogResponse.data?.worklogs)
+            ? worklogResponse.data.worklogs
+            : [];
+          
+          for (const worklog of worklogs) {
+            const authorId = worklog?.author?.accountId || worklog?.author?.name || "";
+            const authorName = worklog?.author?.displayName || worklog?.author?.emailAddress || "";
+            const worklogStarted = new Date(worklog?.started);
+            
+            // Filter by user and date range
+            const isUserMatch = authorId === username || 
+                               authorName.toLowerCase().includes(username.toLowerCase()) ||
+                               (worklog?.author?.emailAddress || "").toLowerCase().includes(username.toLowerCase());
+            
+            const isDateMatch = worklogStarted >= startDateObj && worklogStarted <= endDateObj;
+            
+            if (isUserMatch && isDateMatch) {
+              allWorklogs.push({
+                issueKey,
+                issueSummary,
+                id: worklog?.id ?? "",
+                author: authorName,
+                timeSpent: worklog?.timeSpent ?? "",
+                timeSpentSeconds: worklog?.timeSpentSeconds ?? 0,
+                started: worklog?.started ?? "",
+                comment: normalizeFieldText(worklog?.comment),
+              });
+            }
+          }
+        } catch {
+          // Continue with other issues if one fails
+        }
+      }
+      
+      // Sort by started date descending
+      allWorklogs.sort((a, b) => new Date(b.started).getTime() - new Date(a.started).getTime());
+      
+      const totalTimeSpentSeconds = allWorklogs.reduce((sum, w) => sum + w.timeSpentSeconds, 0);
+      const totalHours = Math.floor(totalTimeSpentSeconds / 3600);
+      const totalMinutes = Math.floor((totalTimeSpentSeconds % 3600) / 60);
+      
+      return textResult({
+        user: username,
+        dateRange: { startDate, endDate },
+        totalWorklogs: allWorklogs.length,
+        totalTimeSpentSeconds,
+        totalTimeFormatted: `${totalHours}h ${totalMinutes}m`,
+        worklogs: allWorklogs,
+      });
+    } catch (error) {
+      return textResult(errorToResult(error));
+    }
+  }
+);
+
+server.registerTool(
   "jira_list_projects",
   {
     title: "List Jira Projects",

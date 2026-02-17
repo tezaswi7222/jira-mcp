@@ -113,6 +113,7 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 ### ⏱️ Time Tracking
 - Log work on issues
 - View work logs
+- Query worklogs by user & date range
 - Flexible time formats
 
 </td>
@@ -146,7 +147,7 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
 </table>
 
 <p align="center">
-  <strong>73 Tools</strong> for comprehensive Jira management
+  <strong>74 Tools</strong> for comprehensive Jira management
 </p>
 
 ## 🚀 Quick Start
@@ -384,7 +385,7 @@ For OAuth authentication:
 
 ## 🛠️ Available Tools
 
-> **73 tools** organised into 14 categories
+> **74 tools** organised into 14 categories
 
 ### 🔐 Authentication (7 tools)
 
@@ -419,7 +420,7 @@ For OAuth authentication:
 | `jira_get_my_open_issues` | Get your open/in-progress issues |
 | `jira_resolve` | Smart routing tool for common intents |
 
-### 💬 Comments & Work Logs (4 tools)
+### 💬 Comments & Work Logs (5 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -427,6 +428,7 @@ For OAuth authentication:
 | `jira_add_comment` | Add a comment to an issue |
 | `jira_add_worklog` | Log time spent on an issue |
 | `jira_get_worklogs` | Get work logs for an issue |
+| `jira_get_user_worklogs` | Get worklogs by user and date range |
 
 ### ⚙️ Configuration & Metadata (9 tools)
 

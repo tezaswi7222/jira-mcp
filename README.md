@@ -427,7 +427,7 @@ For OAuth authentication:
 | `jira_get_issue_comments` | Get comments on an issue |
 | `jira_add_comment` | Add a comment to an issue |
 | `jira_add_worklog` | Log time spent on an issue |
-| `jira_get_worklogs` | Get work logs for an issue |
+| `jira_get_issue_worklogs` | Get work logs for an issue |
 | `jira_get_user_worklogs` | Get worklogs by user and date range |
 
 ### ⚙️ Configuration & Metadata (9 tools)

@@ -150,7 +150,26 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
   <strong>74 Tools</strong> for comprehensive Jira management
 </p>
 
-## 🚀 Quick Start
+## � Prerequisites
+
+Before using this package, ensure you have:
+
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| **Node.js** | ≥18.0.0 | [Download](https://nodejs.org/) - LTS recommended |
+| **npm** | ≥8.0.0 | Comes with Node.js |
+| **Jira Cloud** | — | Jira Server/Data Center not supported |
+| **Atlassian Account** | — | With access to your Jira instance |
+| **API Token** | — | [Generate here](https://id.atlassian.com/manage-profile/security/api-tokens) |
+
+### MCP-Compatible Client (one of):
+- **VS Code** with GitHub Copilot extension
+- **Claude Desktop** app
+- **Cursor** IDE
+- **Windsurf** IDE
+- Any other MCP-compatible AI assistant
+
+## �🚀 Quick Start
 
 ### Installation
 

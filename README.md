@@ -27,6 +27,9 @@
   <a href="https://modelcontextprotocol.io/">
     <img src="https://img.shields.io/badge/MCP-Compatible-8A2BE2?style=flat-square" alt="MCP Compatible">
   </a>
+  <a href="https://bun.sh/">
+    <img src="https://img.shields.io/badge/Bun-1.0%2B-fbf0df?style=flat-square&logo=bun&logoColor=black" alt="Bun 1.0+">
+  </a>
   <a href="https://nodejs.org/">
     <img src="https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js 18+">
   </a>
@@ -150,38 +153,94 @@ A **Model Context Protocol (MCP)** server that enables AI assistants like **GitH
   <strong>74 Tools</strong> for comprehensive Jira management
 </p>
 
-## � Prerequisites
+## 📋 Prerequisites
 
-Before using this package, ensure you have:
+### Runtime Environment (choose ONE)
 
-| Requirement | Version | Notes |
-|-------------|---------|-------|
-| **Node.js** | ≥18.0.0 | [Download](https://nodejs.org/) - LTS recommended |
-| **npm** | ≥8.0.0 | Comes with Node.js |
-| **Jira Cloud** | — | Jira Server/Data Center not supported |
-| **Atlassian Account** | — | With access to your Jira instance |
-| **API Token** | — | [Generate here](https://id.atlassian.com/manage-profile/security/api-tokens) |
+<table>
+<tr>
+<th width="50%">🥟 Bun (Easier for beginners)</th>
+<th width="50%">📦 Node.js (Traditional)</th>
+</tr>
+<tr>
+<td>
 
-### MCP-Compatible Client (one of):
+**Simpler installation, faster execution**
+
+**Install Bun (one command):**
+
+Windows (PowerShell as Admin):
+```powershell
+irm bun.sh/install.ps1 | iex
+```
+
+macOS / Linux:
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+</td>
+<td>
+
+**More widely used, larger ecosystem**
+
+**Requirements:**
+- Node.js ≥18.0.0 ([Download](https://nodejs.org/))
+- npm ≥8.0.0 (included with Node.js)
+
+</td>
+</tr>
+</table>
+
+### Jira Requirements
+
+| Requirement | Notes |
+|-------------|-------|
+| **Jira Cloud** | Jira Server/Data Center not supported |
+| **Atlassian Account** | With access to your Jira instance |
+| **API Token** | [Generate here](https://id.atlassian.com/manage-profile/security/api-tokens) |
+
+### MCP-Compatible Client (one of)
 - **VS Code** with GitHub Copilot extension
 - **Claude Desktop** app
 - **Cursor** IDE
 - **Windsurf** IDE
 - Any other MCP-compatible AI assistant
 
-## �🚀 Quick Start
+## 🚀 Quick Start
 
 ### Installation
 
+<table>
+<tr>
+<th width="50%">🥟 Using Bun (Recommended)</th>
+<th width="50%">📦 Using npm</th>
+</tr>
+<tr>
+<td>
+
 ```bash
+# Run directly (no install needed)
+bunx mcp-jira-cloud@latest
+
+# Or install globally
+bun install -g mcp-jira-cloud
+```
+
+</td>
+<td>
+
+```bash
+# Run directly (no install needed)
+npx -y mcp-jira-cloud@latest
+
+# Or install globally
 npm install -g mcp-jira-cloud
 ```
 
-Or use directly with `npx` (always gets latest version):
-
-```bash
-npx -y mcp-jira-cloud@latest
-```
+</td>
+</tr>
+</table>
 
 ### Get Your API Token
 
@@ -191,12 +250,14 @@ npx -y mcp-jira-cloud@latest
 
 ### Configure Your AI Assistant
 
-There are two ways to run the MCP server:
+Choose the command based on your runtime:
 
-| Method | Command | Best For |
-|--------|---------|----------|
-| **npx** (no install) | `npx -y mcp-jira-cloud@latest` | Quick setup, always latest version |
-| **Global install** | `jira-mcp` | Faster startup, offline usage |
+| Runtime | Method | Command |
+|---------|--------|---------|
+| **Bun** | Run directly | `bunx mcp-jira-cloud@latest` |
+| **Bun** | Global install | `bun install -g mcp-jira-cloud` → `jira-mcp` |
+| **npm** | Run directly | `npx -y mcp-jira-cloud@latest` |
+| **npm** | Global install | `npm i -g mcp-jira-cloud` → `jira-mcp` |
 
 ---
 
@@ -204,7 +265,31 @@ There are two ways to run the MCP server:
 
 Create or edit `.vscode/mcp.json` in your workspace:
 
-**Using npx (recommended):**
+<details>
+<summary><strong>🥟 Using Bun (recommended for beginners)</strong></summary>
+
+```json
+{
+  "servers": {
+    "jira": {
+      "type": "stdio",
+      "command": "bunx",
+      "args": ["mcp-jira-cloud@latest"],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>📦 Using npx</strong></summary>
+
 ```json
 {
   "servers": {
@@ -222,7 +307,11 @@ Create or edit `.vscode/mcp.json` in your workspace:
 }
 ```
 
-**After global install (`npm i -g mcp-jira-cloud`):**
+</details>
+
+<details>
+<summary><strong>⚡ After global install</strong></summary>
+
 ```json
 {
   "servers": {
@@ -239,6 +328,8 @@ Create or edit `.vscode/mcp.json` in your workspace:
   }
 }
 ```
+
+</details>
 
 ---
 
@@ -246,7 +337,30 @@ Create or edit `.vscode/mcp.json` in your workspace:
 
 Add to your Claude configuration (`claude_desktop_config.json`):
 
-**Using npx (recommended):**
+<details>
+<summary><strong>🥟 Using Bun (recommended for beginners)</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "bunx",
+      "args": ["mcp-jira-cloud@latest"],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>📦 Using npx</strong></summary>
+
 ```json
 {
   "mcpServers": {
@@ -263,22 +377,7 @@ Add to your Claude configuration (`claude_desktop_config.json`):
 }
 ```
 
-**After global install (`npm i -g mcp-jira-cloud`):**
-```json
-{
-  "mcpServers": {
-    "jira": {
-      "command": "jira-mcp",
-      "args": [],
-      "env": {
-        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
-        "JIRA_EMAIL": "your-email@example.com",
-        "JIRA_API_TOKEN": "your-api-token"
-      }
-    }
-  }
-}
-```
+</details>
 
 ---
 
@@ -286,7 +385,30 @@ Add to your Claude configuration (`claude_desktop_config.json`):
 
 Create `.cursor/mcp.json` in your project or home directory:
 
-**Using npx (recommended):**
+<details>
+<summary><strong>🥟 Using Bun (recommended for beginners)</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "bunx",
+      "args": ["mcp-jira-cloud@latest"],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>📦 Using npx</strong></summary>
+
 ```json
 {
   "mcpServers": {
@@ -303,7 +425,11 @@ Create `.cursor/mcp.json` in your project or home directory:
 }
 ```
 
-**After global install (`npm i -g mcp-jira-cloud`):**
+</details>
+
+<details>
+<summary><strong>⚡ After global install</strong></summary>
+
 ```json
 {
   "mcpServers": {
@@ -319,6 +445,8 @@ Create `.cursor/mcp.json` in your project or home directory:
   }
 }
 ```
+
+</details>
 
 ---
 
@@ -326,7 +454,30 @@ Create `.cursor/mcp.json` in your project or home directory:
 
 Add to your Windsurf MCP configuration:
 
-**Using npx (recommended):**
+<details>
+<summary><strong>🥟 Using Bun (recommended for beginners)</strong></summary>
+
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "bunx",
+      "args": ["mcp-jira-cloud@latest"],
+      "env": {
+        "JIRA_BASE_URL": "https://your-domain.atlassian.net",
+        "JIRA_EMAIL": "your-email@example.com",
+        "JIRA_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>📦 Using npx</strong></summary>
+
 ```json
 {
   "mcpServers": {
@@ -343,7 +494,11 @@ Add to your Windsurf MCP configuration:
 }
 ```
 
-**After global install (`npm i -g mcp-jira-cloud`):**
+</details>
+
+<details>
+<summary><strong>⚡ After global install</strong></summary>
+
 ```json
 {
   "mcpServers": {
@@ -359,6 +514,8 @@ Add to your Windsurf MCP configuration:
   }
 }
 ```
+
+</details>
 
 ## ⚙️ Configuration
 
@@ -684,6 +841,29 @@ Once configured, interact with Jira through natural conversation:
 ## 🔧 Troubleshooting
 
 <details>
+<summary><strong>🥟 Bun Installation Issues</strong></summary>
+
+**Windows (PowerShell as Administrator):**
+```powershell
+# If irm fails, try:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm bun.sh/install.ps1 | iex
+```
+
+**macOS/Linux:**
+```bash
+# If curl fails, check your internet connection or try:
+brew install oven-sh/bun/bun  # macOS with Homebrew
+```
+
+**Verify Installation:**
+```bash
+bun --version  # Should show 1.x.x
+```
+
+</details>
+
+<details>
 <summary><strong>❌ "MISSING_AUTH" Error</strong></summary>
 
 Ensure your environment variables are correctly set. Verify with `jira_auth_status`.
@@ -734,6 +914,27 @@ The issue or project doesn't exist, or you don't have access to view it.
 
 </details>
 
+<details>
+<summary><strong>❌ npx/bunx Using Old Version</strong></summary>
+
+Clear the cache to ensure you get the latest version:
+
+**npm:**
+```bash
+npx -y --package=mcp-jira-cloud@latest mcp-jira-cloud
+# or clear cache:
+npm cache clean --force
+```
+
+**Bun:**
+```bash
+bunx --bun mcp-jira-cloud@latest
+# or clear cache:
+bun pm cache rm
+```
+
+</details>
+
 ## 📦 Package Information
 
 | Attribute | Value |
@@ -741,7 +942,7 @@ The issue or project doesn't exist, or you don't have access to view it.
 | Package name | [`mcp-jira-cloud`](https://www.npmjs.com/package/mcp-jira-cloud) |
 | Latest Version | ![npm version](https://img.shields.io/npm/v/mcp-jira-cloud?style=flat-square) |
 | License | [MIT](LICENSE) |
-| Node.js | ≥18.0.0 |
+| Runtime | Bun ≥1.0.0 or Node.js ≥18.0.0 |
 | TypeScript | ≥5.0.0 |
 | Module | ES Modules |
 | Tools | **74** |
@@ -757,7 +958,25 @@ The issue or project doesn't exist, or you don't have access to view it.
 
 ## 🆕 What's New
 
-### 🚀 v4.0.0 (Latest)
+### 🥟 v4.2.0 (Latest)
+
+| Feature | Description |
+|---------|-------------|
+| 🥟 **Bun Support** | Run with `bunx mcp-jira-cloud@latest` - easier for beginners |
+| 📖 **Better Docs** | Simplified prerequisites and configuration examples |
+
+---
+
+### 🔍 v4.1.0
+
+| Feature | Description |
+|---------|-------------|
+| 🎯 **Improved Tool Descriptions** | Better trigger phrases, negative guidance, and cross-references for AI agents |
+| 📋 **Prerequisites Section** | Clear requirements documented in README |
+
+---
+
+### 🚀 v4.0.0
 
 | Change | Description |
 |--------|-------------|

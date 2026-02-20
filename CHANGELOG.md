@@ -1,3 +1,9 @@
+## [4.2.1](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.0...v4.2.1) (2026-02-20)
+
+### 🐛 Bug Fixes
+
+* Trigger pipeline ([0b45ff3](https://github.com/tezaswi7222/jira-mcp/commit/0b45ff3bc90ab05e26aa8fa68858315b037f85be))
+
 ## [4.2.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.1.0...v4.2.0) (2026-02-20)
 
 ### ✨ Features

@@ -1,3 +1,9 @@
+## [4.2.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.1.0...v4.2.0) (2026-02-20)
+
+### ✨ Features
+
+* add Bun runtime support for easier installation ([14de1b5](https://github.com/tezaswi7222/jira-mcp/commit/14de1b5da871cdd58e6392d683add662ca90bb75))
+
 ## [4.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.0.0...v4.1.0) (2026-02-17)
 
 ### ✨ Features

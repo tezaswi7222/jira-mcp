@@ -248,17 +248,6 @@ npm install -g mcp-jira-cloud
 2. Click **Create API token**
 3. Copy the token
 
-### Configure Your AI Assistant
-
-Choose the command based on your runtime:
-
-| Runtime | Method | Command |
-|---------|--------|---------|
-| **Bun** | Run directly | `bunx mcp-jira-cloud@latest` |
-| **Bun** | Global install | `bun install -g mcp-jira-cloud` → `jira-mcp` |
-| **npm** | Run directly | `npx -y mcp-jira-cloud@latest` |
-| **npm** | Global install | `npm i -g mcp-jira-cloud` → `jira-mcp` |
-
 ---
 
 #### 📘 VS Code (GitHub Copilot)

@@ -1,3 +1,9 @@
+## [4.3.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.1...v4.3.0) (2026-05-09)
+
+### ✨ Features
+
+* modularize tool architecture and expand to 91 tools ([c6deebf](https://github.com/tezaswi7222/jira-mcp/commit/c6deebfa3025aef43e9bcd4328f9a193c9ff153d))
+
 ## [4.2.1](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.0...v4.2.1) (2026-02-20)
 
 ### 🐛 Bug Fixes

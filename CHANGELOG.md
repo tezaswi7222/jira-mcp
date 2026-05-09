@@ -1,3 +1,9 @@
+## [4.3.1](https://github.com/tezaswi7222/jira-mcp/compare/v4.3.0...v4.3.1) (2026-05-09)
+
+### 🐛 Bug Fixes
+
+* trigger patch release for README.md update ([2d34290](https://github.com/tezaswi7222/jira-mcp/commit/2d34290c765edfb6bf6399f6ff9937fd07df15d0))
+
 ## [4.3.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.1...v4.3.0) (2026-05-09)
 
 ### ✨ Features

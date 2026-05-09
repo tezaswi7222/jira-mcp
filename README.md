@@ -947,7 +947,18 @@ bun pm cache rm
 
 ## 🆕 What's New
 
-### 🥟 v4.2.0 (Latest)
+### 🚀 v4.3.0 (Latest)
+
+| Feature | Description |
+|---------|-------------|
+| 🧩 **Modular Architecture** | Tools refactored into modular, organized files (`src/tools/`) |
+| 🚀 **Expanded Toolset** | Now 91 tools, including new Agile, Worklog, and Metadata functions |
+| 🛡️ **Improved Tooling** | Standardized authentication (`withClient`) & annotation presets |
+| ✅ **Test Suite** | Integrated Vitest for robust unit testing across the codebase |
+
+---
+
+### 🥟 v4.2.0
 
 | Feature | Description |
 |---------|-------------|

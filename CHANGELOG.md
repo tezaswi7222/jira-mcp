@@ -1,3 +1,9 @@
+## [4.3.4](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.3.3...v4.3.4) (2026-06-05)
+
+### 🐛 Bug Fixes
+
+* correct LICENSE badge link to master branch (main 404s) ([02065b2](https://github.com/tezaswiraj7222/jira-mcp/commit/02065b2df368ff82848f910246ed144597069364))
+
 ## [4.3.3](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.3.2...v4.3.3) (2026-06-05)
 
 ### 🐛 Bug Fixes

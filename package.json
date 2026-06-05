@@ -73,30 +73,30 @@
     "tickets"
   ],
   "author": {
-    "name": "Tezaswi Raj (github: tezaswi7222)",
+    "name": "Tezaswi Raj (github: tezaswiraj7222)",
     "email": "t.raj@maxxton.com",
-    "url": "https://github.com/tezaswi7222"
+    "url": "https://github.com/tezaswiraj7222"
   },
   "contributors": [
     {
-      "name": "Tezaswi Raj (github: tezaswi7222)",
+      "name": "Tezaswi Raj (github: tezaswiraj7222)",
       "email": "t.raj@maxxton.com",
-      "url": "https://github.com/tezaswi7222"
+      "url": "https://github.com/tezaswiraj7222"
     }
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tezaswi7222/jira-mcp.git"
+    "url": "git+https://github.com/tezaswiraj7222/jira-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/tezaswi7222/jira-mcp/issues",
+    "url": "https://github.com/tezaswiraj7222/jira-mcp/issues",
     "email": "t.raj@maxxton.com"
   },
-  "homepage": "https://github.com/tezaswi7222/jira-mcp#readme",
+  "homepage": "https://github.com/tezaswiraj7222/jira-mcp#readme",
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/tezaswi7222"
+    "url": "https://github.com/sponsors/tezaswiraj7222"
   },
   "engines": {
     "node": ">=18.0.0",

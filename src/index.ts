@@ -79,10 +79,10 @@ MCP CONFIGURATION:
     }
 
 DOCUMENTATION:
-  https://github.com/tezaswi7222/jira-mcp#readme
+  https://github.com/tezaswiraj7222/jira-mcp#readme
 
 ISSUES:
-  https://github.com/tezaswi7222/jira-mcp/issues
+  https://github.com/tezaswiraj7222/jira-mcp/issues
 `);
 }
 

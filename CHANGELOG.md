@@ -1,46 +1,46 @@
-## [4.3.3](https://github.com/tezaswi7222/jira-mcp/compare/v4.3.2...v4.3.3) (2026-06-05)
+## [4.3.3](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.3.2...v4.3.3) (2026-06-05)
 
 ### 🐛 Bug Fixes
 
-* republish to refresh npm README with v4.3.2 release notes ([#2](https://github.com/tezaswi7222/jira-mcp/issues/2)) ([3d626e6](https://github.com/tezaswi7222/jira-mcp/commit/3d626e6e17d420cea87f16e2f3a0bd719f82775f))
+* republish to refresh npm README with v4.3.2 release notes ([#2](https://github.com/tezaswiraj7222/jira-mcp/issues/2)) ([3d626e6](https://github.com/tezaswiraj7222/jira-mcp/commit/3d626e6e17d420cea87f16e2f3a0bd719f82775f))
 
-## [4.3.2](https://github.com/tezaswi7222/jira-mcp/compare/v4.3.1...v4.3.2) (2026-06-05)
-
-### 🐛 Bug Fixes
-
-* return caller-requested fields from jira_get_issue and jira_search_issues ([#2](https://github.com/tezaswi7222/jira-mcp/issues/2)) ([6612430](https://github.com/tezaswi7222/jira-mcp/commit/6612430b463b8851b448be4ecdcfab66af2dfcba))
-
-## [4.3.1](https://github.com/tezaswi7222/jira-mcp/compare/v4.3.0...v4.3.1) (2026-05-09)
+## [4.3.2](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.3.1...v4.3.2) (2026-06-05)
 
 ### 🐛 Bug Fixes
 
-* trigger patch release for README.md update ([2d34290](https://github.com/tezaswi7222/jira-mcp/commit/2d34290c765edfb6bf6399f6ff9937fd07df15d0))
+* return caller-requested fields from jira_get_issue and jira_search_issues ([#2](https://github.com/tezaswiraj7222/jira-mcp/issues/2)) ([6612430](https://github.com/tezaswiraj7222/jira-mcp/commit/6612430b463b8851b448be4ecdcfab66af2dfcba))
 
-## [4.3.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.1...v4.3.0) (2026-05-09)
+## [4.3.1](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.3.0...v4.3.1) (2026-05-09)
+
+### 🐛 Bug Fixes
+
+* trigger patch release for README.md update ([2d34290](https://github.com/tezaswiraj7222/jira-mcp/commit/2d34290c765edfb6bf6399f6ff9937fd07df15d0))
+
+## [4.3.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.2.1...v4.3.0) (2026-05-09)
 
 ### ✨ Features
 
-* modularize tool architecture and expand to 91 tools ([c6deebf](https://github.com/tezaswi7222/jira-mcp/commit/c6deebfa3025aef43e9bcd4328f9a193c9ff153d))
+* modularize tool architecture and expand to 91 tools ([c6deebf](https://github.com/tezaswiraj7222/jira-mcp/commit/c6deebfa3025aef43e9bcd4328f9a193c9ff153d))
 
-## [4.2.1](https://github.com/tezaswi7222/jira-mcp/compare/v4.2.0...v4.2.1) (2026-02-20)
+## [4.2.1](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.2.0...v4.2.1) (2026-02-20)
 
 ### 🐛 Bug Fixes
 
-* Trigger pipeline ([0b45ff3](https://github.com/tezaswi7222/jira-mcp/commit/0b45ff3bc90ab05e26aa8fa68858315b037f85be))
+* Trigger pipeline ([0b45ff3](https://github.com/tezaswiraj7222/jira-mcp/commit/0b45ff3bc90ab05e26aa8fa68858315b037f85be))
 
-## [4.2.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.1.0...v4.2.0) (2026-02-20)
-
-### ✨ Features
-
-* add Bun runtime support for easier installation ([14de1b5](https://github.com/tezaswi7222/jira-mcp/commit/14de1b5da871cdd58e6392d683add662ca90bb75))
-
-## [4.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v4.0.0...v4.1.0) (2026-02-17)
+## [4.2.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.1.0...v4.2.0) (2026-02-20)
 
 ### ✨ Features
 
-* improve tool descriptions for better AI agent selection ([6cfdd2f](https://github.com/tezaswi7222/jira-mcp/commit/6cfdd2f84d8dc6eec7d55db2d6d111ffaadf78a6))
+* add Bun runtime support for easier installation ([14de1b5](https://github.com/tezaswiraj7222/jira-mcp/commit/14de1b5da871cdd58e6392d683add662ca90bb75))
 
-## [4.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.1...v4.0.0) (2026-02-17)
+## [4.1.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v4.0.0...v4.1.0) (2026-02-17)
+
+### ✨ Features
+
+* improve tool descriptions for better AI agent selection ([6cfdd2f](https://github.com/tezaswiraj7222/jira-mcp/commit/6cfdd2f84d8dc6eec7d55db2d6d111ffaadf78a6))
+
+## [4.0.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v3.1.1...v4.0.0) (2026-02-17)
 
 ### ⚠ BREAKING CHANGES
 
@@ -52,21 +52,21 @@
 
 ### 🐛 Bug Fixes
 
-* remove duplicate jira_get_user_worklogs and rename jira_get_worklogs ([40cfa95](https://github.com/tezaswi7222/jira-mcp/commit/40cfa958905a09a130d6f6bbdb36942db2c6fe05))
+* remove duplicate jira_get_user_worklogs and rename jira_get_worklogs ([40cfa95](https://github.com/tezaswiraj7222/jira-mcp/commit/40cfa958905a09a130d6f6bbdb36942db2c6fe05))
 
-## [3.1.1](https://github.com/tezaswi7222/jira-mcp/compare/v3.1.0...v3.1.1) (2026-02-17)
+## [3.1.1](https://github.com/tezaswiraj7222/jira-mcp/compare/v3.1.0...v3.1.1) (2026-02-17)
 
 ### 🐛 Bug Fixes
 
-* remove .default() from zod schema in jira_get_user_worklogs ([7620b45](https://github.com/tezaswi7222/jira-mcp/commit/7620b451b581a50023c2d8ee896cc02f8ee3064d))
+* remove .default() from zod schema in jira_get_user_worklogs ([7620b45](https://github.com/tezaswiraj7222/jira-mcp/commit/7620b451b581a50023c2d8ee896cc02f8ee3064d))
 
-## [3.1.0](https://github.com/tezaswi7222/jira-mcp/compare/v3.0.0...v3.1.0) (2026-02-17)
+## [3.1.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v3.0.0...v3.1.0) (2026-02-17)
 
 ### ✨ Features
 
-* add jira_get_user_worklogs tool for querying worklogs by user and date range ([fa653ba](https://github.com/tezaswi7222/jira-mcp/commit/fa653baa24b18afc1faf6dbe56c46315ee6f63ff))
+* add jira_get_user_worklogs tool for querying worklogs by user and date range ([fa653ba](https://github.com/tezaswiraj7222/jira-mcp/commit/fa653baa24b18afc1faf6dbe56c46315ee6f63ff))
 
-## [3.0.0](https://github.com/tezaswi7222/jira-mcp/compare/v2.0.5...v3.0.0) (2026-02-17)
+## [3.0.0](https://github.com/tezaswiraj7222/jira-mcp/compare/v2.0.5...v3.0.0) (2026-02-17)
 
 ### ⚠ BREAKING CHANGES
 
@@ -87,16 +87,16 @@ Updated documentation:
 
 ### ✨ Features
 
-* add Phase 13 Time Tracking Reports (78 tools) - jira_get_user_worklogs for user worklog reports by date range ([878ea04](https://github.com/tezaswi7222/jira-mcp/commit/878ea042967f601fd0795963e7df01fa8e1143f3))
-* remove destructive delete tools for safety ([ad40090](https://github.com/tezaswi7222/jira-mcp/commit/ad400900792f13a95323ed85bb1a727bd0dd5c0d))
+* add Phase 13 Time Tracking Reports (78 tools) - jira_get_user_worklogs for user worklog reports by date range ([878ea04](https://github.com/tezaswiraj7222/jira-mcp/commit/878ea042967f601fd0795963e7df01fa8e1143f3))
+* remove destructive delete tools for safety ([ad40090](https://github.com/tezaswiraj7222/jira-mcp/commit/ad400900792f13a95323ed85bb1a727bd0dd5c0d))
 
 ### 🐛 Bug Fixes
 
-* add semantic-release plugins to devDependencies ([1955510](https://github.com/tezaswi7222/jira-mcp/commit/19555101284852b7a98f92d826b71fb3c37fb931))
-* **ci:** remove conflicting npm scripts and fix git credentials ([79240ee](https://github.com/tezaswi7222/jira-mcp/commit/79240eef7b0a7e0c117c94c6ab80136a8a7df95a))
-* **ci:** use deploy key for branch protection bypass ([37b4af8](https://github.com/tezaswi7222/jira-mcp/commit/37b4af83efcd29f067db8094f793dae6716bab5f))
-* **ci:** use GH_ACTION_TOKEN PAT for branch protection bypass ([f46ecdd](https://github.com/tezaswi7222/jira-mcp/commit/f46ecdd8030c4668f02942408200e2f41d545606))
-* update deprecated createmeta API and patch security vulnerabilities ([3a98dd0](https://github.com/tezaswi7222/jira-mcp/commit/3a98dd01059b41bb86f4f8467ea064e37a31d093))
+* add semantic-release plugins to devDependencies ([1955510](https://github.com/tezaswiraj7222/jira-mcp/commit/19555101284852b7a98f92d826b71fb3c37fb931))
+* **ci:** remove conflicting npm scripts and fix git credentials ([79240ee](https://github.com/tezaswiraj7222/jira-mcp/commit/79240eef7b0a7e0c117c94c6ab80136a8a7df95a))
+* **ci:** use deploy key for branch protection bypass ([37b4af8](https://github.com/tezaswiraj7222/jira-mcp/commit/37b4af83efcd29f067db8094f793dae6716bab5f))
+* **ci:** use GH_ACTION_TOKEN PAT for branch protection bypass ([f46ecdd](https://github.com/tezaswiraj7222/jira-mcp/commit/f46ecdd8030c4668f02942408200e2f41d545606))
+* update deprecated createmeta API and patch security vulnerabilities ([3a98dd0](https://github.com/tezaswiraj7222/jira-mcp/commit/3a98dd01059b41bb86f4f8467ea064e37a31d093))
 
 # Changelog
 

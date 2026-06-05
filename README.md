@@ -15,11 +15,11 @@
   <a href="https://www.npmjs.com/package/mcp-jira-cloud">
     <img src="https://img.shields.io/npm/dm/mcp-jira-cloud?style=flat-square&color=blue" alt="npm downloads">
   </a>
-  <a href="https://github.com/tezaswi7222/jira-mcp/blob/main/LICENSE">
+  <a href="https://github.com/tezaswiraj7222/jira-mcp/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/mcp-jira-cloud?style=flat-square&color=green" alt="license">
   </a>
-  <a href="https://github.com/tezaswi7222/jira-mcp">
-    <img src="https://img.shields.io/github/stars/tezaswi7222/jira-mcp?style=flat-square&logo=github" alt="GitHub stars">
+  <a href="https://github.com/tezaswiraj7222/jira-mcp">
+    <img src="https://img.shields.io/github/stars/tezaswiraj7222/jira-mcp?style=flat-square&logo=github" alt="GitHub stars">
   </a>
 </p>
 
@@ -951,7 +951,7 @@ bun pm cache rm
 
 | Fix | Description |
 |-----|-------------|
-| 🏷️ **Full field passthrough** | `jira_get_issue` & `jira_search_issues` now return every requested field — `labels`, `status`, `priority`, `assignee`, `components`, `fixVersions`, custom fields, etc. — instead of only `key`/`summary`/`description` ([#2](https://github.com/tezaswi7222/jira-mcp/issues/2)) |
+| 🏷️ **Full field passthrough** | `jira_get_issue` & `jira_search_issues` now return every requested field — `labels`, `status`, `priority`, `assignee`, `components`, `fixVersions`, custom fields, etc. — instead of only `key`/`summary`/`description` ([#2](https://github.com/tezaswiraj7222/jira-mcp/issues/2)) |
 | 📋 **Useful defaults** | When `fields` is omitted, the full-detail tools now return a broad default set; lean summary tools keep their trimmed output |
 | 🧹 **Compact, no fabrication** | Nested objects are normalized to friendly values (`status`→name, `assignee`→display name, …) and unrequested fields are never invented |
 
@@ -1084,20 +1084,20 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 | Resource | Link |
 |----------|------|
-| GitHub | [github.com/tezaswi7222/jira-mcp](https://github.com/tezaswi7222/jira-mcp) |
+| GitHub | [github.com/tezaswiraj7222/jira-mcp](https://github.com/tezaswiraj7222/jira-mcp) |
 | npm | [npmjs.com/package/mcp-jira-cloud](https://www.npmjs.com/package/mcp-jira-cloud) |
-| Issues | [Report a bug](https://github.com/tezaswi7222/jira-mcp/issues) |
+| Issues | [Report a bug](https://github.com/tezaswiraj7222/jira-mcp/issues) |
 | MCP Protocol | [modelcontextprotocol.io](https://modelcontextprotocol.io/) |
 | Jira API | [Jira REST API v3](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) |
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/tezaswi7222">Tezaswi Raj (github: tezaswi7222)</a>
+  Made with ❤️ by <a href="https://github.com/tezaswiraj7222">Tezaswi Raj (github: tezaswiraj7222)</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/sponsors/tezaswi7222">
+  <a href="https://github.com/sponsors/tezaswiraj7222">
     <img src="https://img.shields.io/badge/Sponsor-❤️-ea4aaa?style=for-the-badge" alt="Sponsor">
   </a>
 </p>

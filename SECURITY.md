@@ -22,7 +22,7 @@ We take the security of `jira-mcp` seriously. If you discover a security vulnera
 Instead, please report them via one of the following methods:
 
 1. **Email**: Send a detailed report to [t.raj@maxxton.com](mailto:t.raj@maxxton.com)
-2. **GitHub Security Advisories**: [Create a private security advisory](https://github.com/tezaswi7222/jira-mcp/security/advisories/new)
+2. **GitHub Security Advisories**: [Create a private security advisory](https://github.com/tezaswiraj7222/jira-mcp/security/advisories/new)
 
 ### What to Include
 

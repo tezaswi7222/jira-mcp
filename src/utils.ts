@@ -59,18 +59,61 @@ export function textToAdf(text: string) {
 
 // ============ Issue Helpers ============
 
+// Compact representations of the nested objects Jira returns for common
+// fields, so requested fields surface as LLM-friendly scalars instead of
+// the full verbose REST shapes (avatars, icon URLs, status categories, ...).
+function compactNamed(value: any): string | null {
+  return value?.name ?? null;
+}
+
+function compactUser(value: any): string | null {
+  return value?.displayName ?? value?.emailAddress ?? value?.accountId ?? null;
+}
+
+function toNameArray(value: any): Array<string> {
+  return Array.isArray(value)
+    ? value.map((entry) => entry?.name ?? "").filter(Boolean)
+    : [];
+}
+
 export function pickIssueSummary(issue: any) {
   const fields = issue?.fields || {};
-  const description = normalizeFieldText(fields.description);
-  const acceptanceCriteria = ACCEPTANCE_FIELD
-    ? normalizeFieldText(fields[ACCEPTANCE_FIELD])
-    : "";
-  return {
-    key: issue?.key ?? "",
-    summary: fields.summary ?? "",
-    description,
-    acceptanceCriteria: acceptanceCriteria || null,
-  };
+
+  // Pass through exactly the fields Jira returned (honours the caller's
+  // `fields` param). Fields that were not requested/returned are NOT
+  // fabricated into the output.
+  const out: Record<string, unknown> = { ...fields };
+
+  // Render the description ADF to plain text, only when it was returned.
+  if ("description" in fields) {
+    out.description = normalizeFieldText(fields.description);
+  }
+
+  // Surface the configured acceptance-criteria custom field under a friendly
+  // key (and drop the raw custom-field id), only when it was returned.
+  if (ACCEPTANCE_FIELD && ACCEPTANCE_FIELD in fields) {
+    out.acceptanceCriteria = normalizeFieldText(fields[ACCEPTANCE_FIELD]) || null;
+    delete out[ACCEPTANCE_FIELD];
+  }
+
+  // Normalize common nested objects into compact values, only when present.
+  if ("status" in fields) out.status = compactNamed(fields.status);
+  if ("priority" in fields) out.priority = compactNamed(fields.priority);
+  if ("issuetype" in fields) out.issuetype = compactNamed(fields.issuetype);
+  if ("resolution" in fields) out.resolution = compactNamed(fields.resolution);
+  if ("assignee" in fields) out.assignee = compactUser(fields.assignee);
+  if ("reporter" in fields) out.reporter = compactUser(fields.reporter);
+  if ("creator" in fields) out.creator = compactUser(fields.creator);
+  if ("project" in fields) out.project = (fields.project as any)?.key ?? null;
+  if ("parent" in fields) out.parent = (fields.parent as any)?.key ?? null;
+  if ("components" in fields) out.components = toNameArray(fields.components);
+  if ("fixVersions" in fields) out.fixVersions = toNameArray(fields.fixVersions);
+  if ("versions" in fields) out.versions = toNameArray(fields.versions);
+
+  // The issue key is identity, not a field — Jira always returns it.
+  out.key = issue?.key ?? "";
+
+  return out;
 }
 
 export function pickIssueSearchSummary(issue: any) {
@@ -82,8 +125,35 @@ export function pickIssueSearchSummary(issue: any) {
   };
 }
 
+// Lean default for summary-shaped tools (jira_get_issue_summary, etc.).
 export function defaultIssueFields() {
   const base = ["summary", "description"];
+  if (ACCEPTANCE_FIELD) base.push(ACCEPTANCE_FIELD);
+  return base;
+}
+
+// Broad default for the "Full Details" tools (jira_get_issue,
+// jira_search_issues) so a fieldless call returns the fields callers
+// actually need instead of just summary + description.
+export function defaultDetailFields() {
+  const base = [
+    "summary",
+    "description",
+    "status",
+    "priority",
+    "issuetype",
+    "assignee",
+    "reporter",
+    "labels",
+    "components",
+    "fixVersions",
+    "parent",
+    "project",
+    "resolution",
+    "created",
+    "updated",
+    "duedate",
+  ];
   if (ACCEPTANCE_FIELD) base.push(ACCEPTANCE_FIELD);
   return base;
 }

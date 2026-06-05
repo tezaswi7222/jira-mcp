@@ -578,9 +578,9 @@ For OAuth authentication:
 
 | Tool | Description |
 |------|-------------|
-| `jira_get_issue` | Get full details of a Jira issue |
+| `jira_get_issue` | Get full details of a Jira issue (labels, status, priority, assignee, components, …); pass `fields` to return a specific subset |
 | `jira_get_issue_summary` | Get summary, description, and acceptance criteria |
-| `jira_search_issues` | Search issues with JQL (full results) |
+| `jira_search_issues` | Search issues with JQL, returning full field details (pass `fields` for a specific subset) |
 | `jira_search_issues_summary` | Search with minimal fields (key, summary, status) |
 | `jira_get_my_open_issues` | Get your open/in-progress issues |
 | `jira_resolve` | Smart routing tool for common intents |

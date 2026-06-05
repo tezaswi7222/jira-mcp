@@ -7,6 +7,7 @@ import {
   pickIssueSummary,
   pickIssueSearchSummary,
   defaultIssueFields,
+  defaultDetailFields,
   buildIssueFields,
   buildUpdateOperations,
 } from "../utils.js";
@@ -44,7 +45,7 @@ export function registerCoreTools(server: McpServer): void {
       }),
     },
     withClient(async (client, _auth, { issueIdOrKey, fields, expand }) => {
-      const fieldParam = fields?.length ? fields : defaultIssueFields();
+      const fieldParam = fields?.length ? fields : defaultDetailFields();
       const response = await client.get(`/rest/api/3/issue/${encodeURIComponent(issueIdOrKey)}`, {
         params: {
           fields: fieldParam.join(","),
@@ -76,7 +77,7 @@ export function registerCoreTools(server: McpServer): void {
       }),
     },
     withClient(async (client, _auth, { jql, startAt, maxResults, fields, expand, nextPageToken, reconcileIssues }) => {
-      const fieldParam = fields?.length ? fields : defaultIssueFields();
+      const fieldParam = fields?.length ? fields : defaultDetailFields();
       const response = await client.get("/rest/api/3/search/jql", {
         params: {
           jql,

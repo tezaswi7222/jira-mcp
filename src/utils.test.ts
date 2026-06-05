@@ -6,6 +6,7 @@ import {
   pickIssueSummary,
   pickIssueSearchSummary,
   defaultIssueFields,
+  defaultDetailFields,
   buildIssueFields,
   buildUpdateOperations,
   errorToResult,
@@ -102,17 +103,74 @@ describe("pickIssueSummary", () => {
         description: null,
       },
     };
-    const result = pickIssueSummary(issue);
+    const result = pickIssueSummary(issue) as any;
     expect(result.key).toBe("PROJ-123");
     expect(result.summary).toBe("Test issue");
     expect(result.description).toBe("");
-    expect(result.acceptanceCriteria).toBeNull();
+    // No acceptance-criteria field configured/returned -> key omitted, not fabricated.
+    expect("acceptanceCriteria" in result).toBe(false);
   });
 
   it("handles missing fields gracefully", () => {
-    const result = pickIssueSummary(null);
+    const result = pickIssueSummary(null) as any;
     expect(result.key).toBe("");
-    expect(result.summary).toBe("");
+    // No fields returned -> only the identity key is present.
+    expect("summary" in result).toBe(false);
+  });
+
+  it("with fields=['labels'] only, returns labels + key and fabricates nothing (issue #2 follow-up)", () => {
+    const issue = { key: "PROJ-7", fields: { labels: ["x", "y"] } };
+    const result = pickIssueSummary(issue) as any;
+    expect(result.labels).toEqual(["x", "y"]);
+    expect(result.key).toBe("PROJ-7");
+    expect("summary" in result).toBe(false);
+    expect("description" in result).toBe(false);
+    expect("acceptanceCriteria" in result).toBe(false);
+    expect("status" in result).toBe(false);
+  });
+
+  it("passes through caller-requested fields (regression: issue #2)", () => {
+    const issue = {
+      key: "PROJ-123",
+      fields: {
+        summary: "Test issue",
+        labels: ["dod-pending", "q2"],
+        status: { name: "Backlog", id: "1", statusCategory: { key: "new" } },
+        priority: { name: "High", id: "2" },
+        assignee: { displayName: "Ada Lovelace", accountId: "abc" },
+      },
+    };
+    const result = pickIssueSummary(issue) as any;
+    expect(result.labels).toEqual(["dod-pending", "q2"]);
+    // Nested objects are normalized to compact, LLM-friendly values.
+    expect(result.status).toBe("Backlog");
+    expect(result.priority).toBe("High");
+    expect(result.assignee).toBe("Ada Lovelace");
+  });
+
+  it("does not fabricate fields that were not returned", () => {
+    const issue = { key: "PROJ-1", fields: { summary: "Only summary" } };
+    const result = pickIssueSummary(issue) as any;
+    expect("labels" in result).toBe(false);
+    expect("status" in result).toBe(false);
+  });
+
+  it("normalizes array fields and parent/project keys", () => {
+    const issue = {
+      key: "PROJ-9",
+      fields: {
+        summary: "Has refs",
+        components: [{ name: "Frontend" }, { name: "API" }],
+        fixVersions: [{ name: "1.2.0" }],
+        parent: { key: "PROJ-1" },
+        project: { key: "PROJ" },
+      },
+    };
+    const result = pickIssueSummary(issue) as any;
+    expect(result.components).toEqual(["Frontend", "API"]);
+    expect(result.fixVersions).toEqual(["1.2.0"]);
+    expect(result.parent).toBe("PROJ-1");
+    expect(result.project).toBe("PROJ");
   });
 });
 
@@ -135,6 +193,15 @@ describe("defaultIssueFields", () => {
     const fields = defaultIssueFields();
     expect(fields).toContain("summary");
     expect(fields).toContain("description");
+  });
+});
+
+describe("defaultDetailFields", () => {
+  it("includes the common fields callers need by default", () => {
+    const fields = defaultDetailFields();
+    for (const f of ["summary", "description", "status", "priority", "labels", "assignee"]) {
+      expect(fields).toContain(f);
+    }
   });
 });
 

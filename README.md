@@ -947,7 +947,17 @@ bun pm cache rm
 
 ## 🆕 What's New
 
-### 🚀 v4.3.0 (Latest)
+### 🐛 v4.3.2 (Latest)
+
+| Fix | Description |
+|-----|-------------|
+| 🏷️ **Full field passthrough** | `jira_get_issue` & `jira_search_issues` now return every requested field — `labels`, `status`, `priority`, `assignee`, `components`, `fixVersions`, custom fields, etc. — instead of only `key`/`summary`/`description` ([#2](https://github.com/tezaswi7222/jira-mcp/issues/2)) |
+| 📋 **Useful defaults** | When `fields` is omitted, the full-detail tools now return a broad default set; lean summary tools keep their trimmed output |
+| 🧹 **Compact, no fabrication** | Nested objects are normalized to friendly values (`status`→name, `assignee`→display name, …) and unrequested fields are never invented |
+
+---
+
+### 🚀 v4.3.0
 
 | Feature | Description |
 |---------|-------------|

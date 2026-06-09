@@ -250,6 +250,12 @@ To see all available options and configuration details:
 npx -y mcp-jira-cloud@latest --help
 ```
 
+To verify your Jira connectivity and credentials:
+
+```bash
+npx -y mcp-jira-cloud@latest --verify
+```
+
 ### Get Your API Token
 
 1. Go to [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)

@@ -30,12 +30,22 @@ ${pkg.name} v${pkg.version}
 ${pkg.description}
 
 USAGE:
+  npx -y mcp-jira-cloud@latest [OPTIONS]
   jira-mcp [OPTIONS]
   mcp-jira-cloud [OPTIONS]
 
 OPTIONS:
   -h, --help       Show this help message and exit
   -v, --version    Show version number and exit
+
+FEATURES:
+  - 91 specialized Jira tools
+  - Comprehensive Agile support (Sprints, Boards, Backlogs, Epics)
+  - Issue management (Search, Create, Update, Transitions)
+  - Worklog management and time tracking
+  - Attachment and comment handling
+  - Advanced JQL search, filters, and dashboards
+  - Metadata and project exploration
 
 ENVIRONMENT VARIABLES:
   Basic Auth (recommended for most users):
@@ -55,10 +65,13 @@ ENVIRONMENT VARIABLES:
 
 EXAMPLES:
   # Run as MCP server (typical usage via AI assistant config)
-  jira-mcp
+  npx -y mcp-jira-cloud@latest
 
   # Check version
-  jira-mcp --version
+  npx -y mcp-jira-cloud@latest --version
+
+  # Show this help message
+  npx -y mcp-jira-cloud@latest --help
 
 MCP CONFIGURATION:
   Add to your AI assistant's MCP configuration:
@@ -94,7 +107,7 @@ function printVersion(): void {
 // Parse CLI arguments
 const args = process.argv.slice(2);
 
-if (args.includes("-h") || args.includes("--help")) {
+if (args.includes("-h") || args.includes("--help") || args.includes("help")) {
   printHelp();
   process.exit(0);
 }

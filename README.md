@@ -242,6 +242,14 @@ npm install -g mcp-jira-cloud
 </tr>
 </table>
 
+### 💡 CLI Help
+
+To see all available options and configuration details:
+
+```bash
+npx -y mcp-jira-cloud@latest --help
+```
+
 ### Get Your API Token
 
 1. Go to [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
@@ -934,7 +942,7 @@ bun pm cache rm
 | Runtime | Bun ≥1.0.0 or Node.js ≥18.0.0 |
 | TypeScript | ≥5.0.0 |
 | Module | ES Modules |
-| Tools | **74** |
+| Tools | **91** |
 
 ### Dependencies
 

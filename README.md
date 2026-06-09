@@ -250,6 +250,12 @@ To see all available options and configuration details:
 npx -y mcp-jira-cloud@latest --help
 ```
 
+To launch the interactive setup helper (generates MCP config JSON):
+
+```bash
+npx -y mcp-jira-cloud@latest --config
+```
+
 To verify your Jira connectivity and credentials:
 
 ```bash

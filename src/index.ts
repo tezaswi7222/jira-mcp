@@ -6,6 +6,7 @@ import { createServer } from "./server.js";
 import { getAuthOrThrow } from "./auth.js";
 import { createClient } from "./client.js";
 import { AxiosError } from "axios";
+import * as readline from "readline/promises";
 
 // ============ CLI Colors ============
 
@@ -43,7 +44,107 @@ function getPackageJson(): { name: string; version: string; description: string 
   }
 }
 
+async function runConfigHelper(): Promise<void> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  console.log(`\n${colors.bold}${colors.cyan}🛠️  Jira MCP Interactive Setup Helper${colors.reset}\n`);
+
+  console.log(`${colors.bold}1. Which AI Assistant are you configuring?${colors.reset}`);
+  console.log(`  1) VS Code (GitHub Copilot)`);
+  console.log(`  2) Claude Desktop`);
+  console.log(`  3) Cursor`);
+  console.log(`  4) Windsurf`);
+  console.log(`  5) Other`);
+  
+  let assistantChoice = await rl.question(`\nSelect [1-5]: `);
+  assistantChoice = assistantChoice.trim();
+
+  console.log(`\n${colors.bold}2. Select Authentication Type${colors.reset}`);
+  console.log(`  1) Basic Auth (Email + API Token) ${colors.green}[Recommended]${colors.reset}`);
+  console.log(`  2) OAuth 2.0 (For advanced integrations)`);
+
+  let authChoice = await rl.question(`\nSelect [1-2] (default 1): `);
+  authChoice = authChoice.trim() || "1";
+
+  const envVars: Record<string, string> = {};
+
+  if (authChoice === "2") {
+    console.log(`\n${colors.bold}OAuth 2.0 Configuration${colors.reset}`);
+    envVars.JIRA_OAUTH_CLIENT_ID = await rl.question(`OAuth Client ID: `);
+    envVars.JIRA_OAUTH_CLIENT_SECRET = await rl.question(`OAuth Client Secret: `);
+    envVars.JIRA_OAUTH_ACCESS_TOKEN = await rl.question(`Access Token: `);
+    envVars.JIRA_OAUTH_REFRESH_TOKEN = await rl.question(`Refresh Token (optional): `);
+    envVars.JIRA_CLOUD_ID = await rl.question(`Jira Cloud ID: `);
+  } else {
+    console.log(`\n${colors.bold}Basic Authentication Configuration${colors.reset}`);
+    console.log(`${colors.dim}Example URL: https://your-domain.atlassian.net${colors.reset}`);
+    let url = await rl.question(`Jira Instance URL: `);
+    // basic sanitization
+    if (url && !url.startsWith('http')) {
+      url = `https://${url}`;
+    }
+    envVars.JIRA_BASE_URL = url;
+    envVars.JIRA_EMAIL = await rl.question(`Atlassian Account Email: `);
+    
+    console.log(`${colors.dim}Get your token here: https://id.atlassian.com/manage-profile/security/api-tokens${colors.reset}`);
+    envVars.JIRA_API_TOKEN = await rl.question(`Jira API Token: `);
+  }
+
+  // Clean empty optional vars
+  Object.keys(envVars).forEach(key => {
+    if (!envVars[key]) delete envVars[key];
+  });
+
+  const serverConfig = {
+    command: "npx",
+    args: ["-y", "mcp-jira-cloud@latest"],
+    env: envVars
+  };
+
+  let finalJson: any = {};
+  let configPath = "your MCP configuration file";
+
+  switch (assistantChoice) {
+    case "1": // VS Code
+      finalJson = { mcp: { servers: { jira: serverConfig } } };
+      configPath = ".vscode/mcp.json or your global User Settings";
+      break;
+    case "2": // Claude
+      finalJson = { mcpServers: { jira: serverConfig } };
+      // Note: Claude Desktop config paths vary by OS, but we provide a generic hint
+      configPath = "claude_desktop_config.json\n(Mac: ~/Library/Application Support/Claude/claude_desktop_config.json)\n(Win: %APPDATA%\\Claude\\claude_desktop_config.json)";
+      break;
+    case "3": // Cursor
+      finalJson = { mcpServers: { jira: serverConfig } };
+      configPath = ".cursor/mcp.json";
+      break;
+    case "4": // Windsurf
+      finalJson = { mcpServers: { jira: serverConfig } };
+      configPath = "~/.codeium/windsurf/mcp_config.json";
+      break;
+    default: // Other
+      finalJson = { mcpServers: { jira: serverConfig } };
+      configPath = "your assistant's MCP configuration file";
+      break;
+  }
+
+  console.log(`\n${colors.bold}${colors.green}✅ Configuration Generated Successfully!${colors.reset}\n`);
+  console.log(`Copy and paste the following JSON into ${colors.bold}${colors.blue}${configPath}${colors.reset}:\n`);
+  
+  console.log(`${colors.dim}========================================${colors.reset}`);
+  console.log(JSON.stringify(finalJson, null, 2));
+  console.log(`${colors.dim}========================================${colors.reset}\n`);
+  
+  console.log(`${colors.italic}Tip: Test your connection anytime by running: ${colors.bold}npx -y mcp-jira-cloud@latest --verify${colors.reset}`);
+
+  rl.close();
+}
+
 async function verifyConnection(): Promise<void> {
+
   console.log(`${colors.cyan}🔍 Verifying Jira connectivity and credentials...${colors.reset}`);
   try {
     const auth = await getAuthOrThrow();
@@ -106,6 +207,7 @@ ${colors.bold}${colors.blue}USAGE:${colors.reset}
 ${colors.bold}${colors.blue}OPTIONS:${colors.reset}
   ${colors.cyan}-h, --help${colors.reset}       Show this help message and exit
   ${colors.cyan}-v, --version${colors.reset}    Show version number and exit
+  ${colors.cyan}--config${colors.reset}        Interactive setup helper for generating MCP config
   ${colors.cyan}--verify${colors.reset}         Verify Jira connectivity and credentials
   ${colors.cyan}--verbose${colors.reset}        Enable diagnostic logging to stderr
 
@@ -197,6 +299,11 @@ if (args.includes("-v") || args.includes("--version")) {
 
 if (args.includes("--verify")) {
   await verifyConnection();
+  process.exit(0);
+}
+
+if (args.includes("--config")) {
+  await runConfigHelper();
   process.exit(0);
 }
 

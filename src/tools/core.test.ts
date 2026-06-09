@@ -6,9 +6,18 @@ const { mockGet } = vi.hoisted(() => ({ mockGet: vi.fn() }));
 vi.mock("axios", () => {
   const instance = {
     get: mockGet,
-    interceptors: { response: { use: vi.fn() } },
+    interceptors: { 
+      request: { use: vi.fn() },
+      response: { use: vi.fn() } 
+    },
   };
-  return { default: { create: vi.fn(() => instance) } };
+  class AxiosError extends Error {
+    response?: any;
+  }
+  return { 
+    default: { create: vi.fn(() => instance) },
+    AxiosError
+  };
 });
 
 vi.mock("../auth.js", async (importOriginal) => {

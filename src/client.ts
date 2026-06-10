@@ -53,6 +53,35 @@ function authCacheKey(auth: AuthConfig): string {
   return `oauth:${auth.cloudId}:${auth.accessToken.slice(0, 16)}`;
 }
 
+function addVerboseLogging(client: AxiosInstance): void {
+  client.interceptors.request.use((config) => {
+    if ((global as any).VERBOSE) {
+      console.error(`\x1b[36m[JIRA-MCP] -> ${config.method?.toUpperCase()} ${config.url}\x1b[0m`);
+    }
+    return config;
+  });
+
+  client.interceptors.response.use(
+    (response) => {
+      if ((global as any).VERBOSE) {
+        console.error(`\x1b[32m[JIRA-MCP] <- ${response.status} ${response.statusText}\x1b[0m`);
+      }
+      return response;
+    },
+    (error) => {
+      if ((global as any).VERBOSE) {
+        const status = error.response?.status;
+        const statusText = error.response?.statusText;
+        console.error(`\x1b[31m[JIRA-MCP] !! ${status || "Error"} ${statusText || error.message}\x1b[0m`);
+        if (error.response?.data) {
+          console.error(`\x1b[2m[JIRA-MCP] Response body: ${JSON.stringify(error.response.data)}\x1b[0m`);
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+}
+
 function createClientInternal(auth: AuthConfig): AxiosInstance {
   let client: AxiosInstance;
 
@@ -77,6 +106,7 @@ function createClientInternal(auth: AuthConfig): AxiosInstance {
     });
   }
 
+  addVerboseLogging(client);
   addRetryInterceptor(client);
   return client;
 }
